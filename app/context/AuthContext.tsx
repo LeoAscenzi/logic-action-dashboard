@@ -10,6 +10,7 @@ export interface AuthUser {
 	role: UserRole;
 	fname: string;
 	lname: string;
+	email: string;
 }
 
 interface AuthContextValue {
@@ -19,15 +20,17 @@ interface AuthContextValue {
 	login: (username: string, password: string) => Promise<AuthUser>;
 	logout: () => Promise<void>;
 	refreshTokens: () => Promise<string | null>;
+	updateUser: (patch: Partial<AuthUser>) => void;
 }
 
 const AuthContext = createContext<AuthContextValue>({
 	user: null,
 	accessToken: null,
 	isLoading: true,
-	login: async () => ({ id: 0, role: "parent" as const, fname: "", lname: "" }),
+	login: async () => ({ id: 0, role: "parent" as const, fname: "", lname: "", email: "" }),
 	logout: async () => {},
 	refreshTokens: async () => null,
+	updateUser: () => {},
 });
 
 type TabMessage =
@@ -168,8 +171,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 		}
 	};
 
+	const updateUser = (patch: Partial<AuthUser>) => {
+		setUser((prev) => {
+			if (!prev) return prev;
+			const updated = { ...prev, ...patch };
+			if (tokenRef.current) broadcast({ type: "TOKEN", token: tokenRef.current, user: updated });
+			return updated;
+		});
+	};
+
 	return (
-		<AuthContext.Provider value={{ user, accessToken, isLoading, login, logout, refreshTokens }}>
+		<AuthContext.Provider value={{ user, accessToken, isLoading, login, logout, refreshTokens, updateUser }}>
 			{children}
 		</AuthContext.Provider>
 	);

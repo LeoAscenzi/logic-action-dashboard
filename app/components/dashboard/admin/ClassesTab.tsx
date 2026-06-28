@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { useApiFetch } from "@/app/hooks/useApiFetch";
-import { useAdminSection } from "@/app/context/AdminSectionContext";
+import { useRouter, useSearchParams } from "next/navigation";
 import { ApiError } from "@/app/lib/api";
 
 interface Class    { id: number; class_name: string; total_sessions: number; start_date: string; end_date: string; capacity: number; teacher_id: number | null; }
@@ -664,20 +664,15 @@ function SessionDetailView({
 }
 
 export default function ClassesTab() {
-	const { selectedId, navigateTo } = useAdminSection();
-	const [view,            setView]           = useState<"list" | "class" | "session">(selectedId ? "class" : "list");
-	const [selectedClassId, setSelectedClassId] = useState<number | null>(selectedId ?? null);
+	const router      = useRouter();
+	const searchParams = useSearchParams();
+	const classParam  = Number(searchParams.get("class")) || null;
+
+	const [view,            setView]           = useState<"list" | "class" | "session">(classParam ? "class" : "list");
+	const [selectedClassId, setSelectedClassId] = useState<number | null>(classParam ?? null);
 	const [selectedSessId,  setSelectedSessId]  = useState<number | null>(null);
 	const [className,       setClassName]       = useState("");
 	const [sessionDate,     setSessionDate]     = useState("");
-
-	useEffect(() => {
-		if (selectedId) {
-			setSelectedClassId(selectedId);
-			setClassName("");
-			setView("class");
-		}
-	}, [selectedId]);
 
 	if (view === "session" && selectedClassId && selectedSessId) {
 		return (
@@ -698,7 +693,7 @@ export default function ClassesTab() {
 				className={className}
 				onBack={() => { setView("list"); setSelectedClassId(null); }}
 				onViewSession={(sid, date) => { setSelectedSessId(sid); setSessionDate(date); setView("session"); }}
-				onViewStudent={(sid) => navigateTo("students", sid)}
+				onViewStudent={(sid) => router.push(`/dashboard/admin/students?student=${sid}`)}
 			/>
 		);
 	}
