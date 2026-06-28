@@ -115,6 +115,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
 		refreshTimerRef.current = setTimeout(async () => {
 			if (tokenRef.current) return;
+
+			// Token handoff from site when navigating cross-domain (no shared cookie)
+			const params = new URLSearchParams(window.location.search);
+			const handoffToken = params.get("token");
+			if (handoffToken) {
+				const url = new URL(window.location.href);
+				url.searchParams.delete("token");
+				window.history.replaceState({}, "", url.toString());
+				try {
+					const profile = await fetchMe(handoffToken);
+					setAccessToken(handoffToken);
+					setUser(profile);
+					broadcast({ type: "TOKEN", token: handoffToken, user: profile });
+				} catch { /* invalid token, fall through unauthenticated */ } finally {
+					setIsLoading(false);
+				}
+				return;
+			}
+
 			try {
 				const token = await refreshTokens();
 				if (token) {
