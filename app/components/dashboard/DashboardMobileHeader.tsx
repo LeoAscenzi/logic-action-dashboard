@@ -73,6 +73,9 @@ export default function DashboardMobileHeader() {
 				<SectionLabel>Community</SectionLabel>
 				<Link href="/dashboard/community/profile" className={navCls(is("/dashboard/community/profile"))}>Profile</Link>
 				<Link href="/dashboard/community/posts" className={navCls(is("/dashboard/community/posts"))}>Activity</Link>
+				{user?.role === "admin" && (
+					<Link href="/dashboard/community/events" className={navCls(is("/dashboard/community/events"))}>Events</Link>
+				)}
 
 				<SectionLabel>Academics</SectionLabel>
 				{user?.role === "admin" && (
@@ -81,6 +84,7 @@ export default function DashboardMobileHeader() {
 						<Link href="/dashboard/admin/classes"  className={navCls(is("/dashboard/admin/classes"))}>Classes</Link>
 						<Link href="/dashboard/admin/grades"   className={navCls(is("/dashboard/admin/grades"))}>Grades</Link>
 						<Link href="/dashboard/admin/teachers" className={navCls(is("/dashboard/admin/teachers"))}>Teachers</Link>
+						<Link href="/dashboard/admin/invites"  className={navCls(is("/dashboard/admin/invites"))}>Invites</Link>
 					</>
 				)}
 				{user?.role === "admin" && (

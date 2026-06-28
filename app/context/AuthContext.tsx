@@ -11,6 +11,10 @@ export interface AuthUser {
 	fname: string;
 	lname: string;
 	email: string;
+	avatar_url?: string | null;
+	email_grades?: boolean;
+	email_announcements?: boolean;
+	email_events?: boolean;
 }
 
 interface AuthContextValue {
