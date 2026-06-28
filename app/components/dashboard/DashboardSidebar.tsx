@@ -1,10 +1,9 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/app/context/AuthContext";
-
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
 
 const SectionLabel = ({ children }: { children: string }) => (
 	<div className="text-[10px] font-semibold uppercase tracking-widest text-[#f5f0e8]/40 px-3 mt-5 mb-1">
@@ -22,17 +21,25 @@ const navCls = (active: boolean) =>
 export default function DashboardSidebar() {
 	const { user, logout } = useAuth();
 	const pathname         = usePathname();
+	const [siteUrl, setSiteUrl] = useState("http://localhost:3000");
+
+	useEffect(() => {
+		setSiteUrl(
+			process.env.NEXT_PUBLIC_SITE_URL ??
+			`${window.location.protocol}//${window.location.hostname}:3000`
+		);
+	}, []);
 
 	const is = (prefix: string) => pathname.startsWith(prefix);
 
 	const handleLogout = async () => {
 		await logout();
-		window.location.href = `${SITE_URL}/community`;
+		window.location.href = `${siteUrl}/community`;
 	};
 
 	return (
 		<aside className="hidden md:flex flex-col w-56 min-h-screen bg-[#0D0F14] border-r border-[#D4AF37]/30 p-6 gap-6">
-			<a href={SITE_URL} className="mb-2">
+			<a href={siteUrl} className="mb-2">
 				<Image src="/logo-light-main.png" alt="Logic Action" width={64} height={64} className="max-h-16 w-auto" priority />
 			</a>
 
@@ -59,6 +66,12 @@ export default function DashboardSidebar() {
 						<Link href="/dashboard/admin/classes"  className={navCls(is("/dashboard/admin/classes"))}>Classes</Link>
 						<Link href="/dashboard/admin/grades"   className={navCls(is("/dashboard/admin/grades"))}>Grades</Link>
 						<Link href="/dashboard/admin/teachers" className={navCls(is("/dashboard/admin/teachers"))}>Teachers</Link>
+					</>
+				)}
+				{user?.role === "admin" && (
+					<>
+						<SectionLabel>Payments</SectionLabel>
+						<Link href="/dashboard/admin/payments" className={navCls(is("/dashboard/admin/payments"))}>Payments</Link>
 					</>
 				)}
 				{user?.role === "parent" && (

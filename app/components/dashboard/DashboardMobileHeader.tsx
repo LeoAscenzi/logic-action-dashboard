@@ -6,8 +6,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/app/context/AuthContext";
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
-
 const SectionLabel = ({ children }: { children: string }) => (
 	<div className="text-[10px] font-semibold uppercase tracking-widest text-[#f5f0e8]/40 px-3 mt-5 mb-1">
 		{children}
@@ -20,10 +18,11 @@ const navCls = (active: boolean) =>
 	}`;
 
 export default function DashboardMobileHeader() {
-	const [open, setOpen]       = useState(false);
-	const [mounted, setMounted] = useState(false);
-	const pathname              = usePathname();
-	const { user, logout }      = useAuth();
+	const [open, setOpen]           = useState(false);
+	const [mounted, setMounted]     = useState(false);
+	const [siteUrl, setSiteUrl]     = useState("http://localhost:3000");
+	const pathname                  = usePathname();
+	const { user, logout }          = useAuth();
 
 	const is = (prefix: string) => pathname.startsWith(prefix);
 
@@ -33,16 +32,22 @@ export default function DashboardMobileHeader() {
 		document.body.style.overflow = open ? "hidden" : "";
 		return () => { document.body.style.overflow = ""; };
 	}, [open]);
+	useEffect(() => {
+		setSiteUrl(
+			process.env.NEXT_PUBLIC_SITE_URL ??
+			`${window.location.protocol}//${window.location.hostname}:3000`
+		);
+	}, []);
 
 	const handleLogout = async () => {
 		await logout();
-		window.location.href = `${SITE_URL}/community`;
+		window.location.href = `${siteUrl}/community`;
 	};
 
 	const overlay = open ? (
 		<div className="fixed inset-0 z-[200] bg-[#0D0F14] flex flex-col">
 			<div className="flex items-center justify-between h-14 px-4 border-b border-[#D4AF37]/30 shrink-0">
-				<a href={SITE_URL}>
+				<a href={siteUrl}>
 					<Image src="/logo-light-main.png" alt="Logic Action" width={32} height={32} className="max-h-8 w-auto" priority />
 				</a>
 				<button
@@ -78,6 +83,12 @@ export default function DashboardMobileHeader() {
 						<Link href="/dashboard/admin/teachers" className={navCls(is("/dashboard/admin/teachers"))}>Teachers</Link>
 					</>
 				)}
+				{user?.role === "admin" && (
+					<>
+						<SectionLabel>Payments</SectionLabel>
+						<Link href="/dashboard/admin/payments" className={navCls(is("/dashboard/admin/payments"))}>Payments</Link>
+					</>
+				)}
 				{user?.role === "parent" && (
 					<Link href="/dashboard/parent" className={navCls(is("/dashboard/parent"))}>My Students</Link>
 				)}
@@ -100,7 +111,7 @@ export default function DashboardMobileHeader() {
 	return (
 		<>
 			<div className="md:hidden fixed top-0 inset-x-0 z-50 h-14 bg-[#0D0F14] border-b border-[#D4AF37]/30 flex items-center justify-between px-4 shrink-0">
-				<a href={SITE_URL}>
+				<a href={siteUrl}>
 					<Image src="/logo-light-main.png" alt="Logic Action" width={32} height={32} className="max-h-8 w-auto" priority />
 				</a>
 				<button
