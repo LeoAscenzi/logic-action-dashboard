@@ -1,0 +1,49 @@
+@import "tailwindcss";
+
+:root {
+	--navy:       #0d1120;
+	--navy-mid:   #151929;
+	--navy-soft:  #1e2336;
+	--gold:       #c9a84c;
+	--gold-light: #e2c97e;
+	--cream:      #f5f0e8;
+	--cream-dim:  #d4c9b0;
+	--ink:        #14182a;
+	--ink-soft:   #5b6072;
+	--line:       #e4ddd0;
+	--line-dark:  #2c3148;
+	--white:      #ffffff;
+
+	--radius:    14px;
+	--radius-sm: 9px;
+	--shadow:    0 18px 50px -24px rgba(13, 17, 32, 0.45);
+	--shadow-sm: 0 8px 24px -16px rgba(13, 17, 32, 0.4);
+}
+
+@theme inline {
+	--color-navy:       var(--navy);
+	--color-navy-mid:   var(--navy-mid);
+	--color-navy-soft:  var(--navy-soft);
+	--color-gold:       var(--gold);
+	--color-gold-light: var(--gold-light);
+	--color-cream:      var(--cream);
+	--color-cream-dim:  var(--cream-dim);
+	--color-ink:        var(--ink);
+	--color-ink-soft:   var(--ink-soft);
+	--color-line:       var(--line);
+	--color-line-dark:  var(--line-dark);
+	--font-sans:        var(--font-geist-sans);
+	--font-mono:        var(--font-geist-mono);
+	--font-inter:       var(--font-inter);
+	--font-playfair:    var(--font-playfair);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+	background: var(--cream);
+	color: var(--ink);
+	font-family: var(--font-inter), system-ui, sans-serif;
+	-webkit-font-smoothing: antialiased;
+	line-height: 1.6;
+}
