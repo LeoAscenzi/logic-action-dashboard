@@ -23,6 +23,8 @@ export default function GradesTab() {
 	const [students,        setStudents]        = useState<Student[]>([]);
 	const [classes,         setClasses]         = useState<Class[]>([]);
 	const [loading,         setLoading]         = useState(true);
+	const [filterClass,     setFilterClass]     = useState("");
+	const [filteredStudents, setFilteredStudents] = useState<Student[]>([]);
 	const [selectedStudent, setSelectedStudent] = useState("");
 	const [grades,          setGrades]          = useState<Exam[]>([]);
 	const [gradesLoading,   setGradesLoading]   = useState(false);
@@ -39,8 +41,22 @@ export default function GradesTab() {
 		Promise.all([
 			apiFetch<Student[]>("/admin/students"),
 			apiFetch<Class[]>("/admin/classes"),
-		]).then(([s, c]) => { setStudents(s); setClasses(c); }).finally(() => setLoading(false));
+		]).then(([s, c]) => { setStudents(s); setClasses(c); setFilteredStudents(s); }).finally(() => setLoading(false));
 	}, []);  // eslint-disable-line react-hooks/exhaustive-deps
+
+	useEffect(() => {
+		setSelectedStudent("");
+		setGrades([]);
+		setSelected(new Set());
+		setAction(null);
+		if (!filterClass) {
+			setFilteredStudents(students);
+			return;
+		}
+		apiFetch<Student[]>(`/admin/classes/${filterClass}/students`)
+			.then(setFilteredStudents)
+			.catch(() => setFilteredStudents([]));
+	}, [filterClass]);  // eslint-disable-line react-hooks/exhaustive-deps
 
 	useEffect(() => {
 		if (!selectedStudent) {
@@ -226,17 +242,25 @@ export default function GradesTab() {
 					</div>
 				)}
 
-				{/* Student selector + grades table */}
+				{/* Filters + grades table */}
 				<div className="flex flex-col gap-4">
-					<div className="flex items-center gap-3">
+					<div className="flex items-center gap-3 flex-wrap">
 						<span className="text-xs font-semibold uppercase tracking-wider text-[#5b6072] shrink-0">View grades for</span>
+						<select
+							className={inputCls + " max-w-xs"}
+							value={filterClass}
+							onChange={e => setFilterClass(e.target.value)}
+						>
+							<option value="">All classes</option>
+							{classes.map(c => <option key={c.id} value={c.id}>{c.class_name}</option>)}
+						</select>
 						<select
 							className={inputCls + " max-w-xs"}
 							value={selectedStudent}
 							onChange={e => setSelectedStudent(e.target.value)}
 						>
 							<option value="">Select student…</option>
-							{students.map(s => <option key={s.id} value={s.id}>{s.fname} {s.lname}</option>)}
+							{filteredStudents.map(s => <option key={s.id} value={s.id}>{s.fname} {s.lname}</option>)}
 						</select>
 					</div>
 

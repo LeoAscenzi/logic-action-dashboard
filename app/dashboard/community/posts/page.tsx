@@ -53,6 +53,18 @@ export default function MyPostsPage() {
 
 	const backHref = user ? `/dashboard/${user.role}` : "/dashboard";
 
+	function PostSkeleton() {
+		return (
+			<div className="flex items-center justify-between px-5 py-4 bg-white animate-pulse">
+				<div className="flex-1 mr-4 flex flex-col gap-1.5">
+					<div className="h-3.5 w-2/3 bg-[var(--line)] rounded" />
+					<div className="h-3 w-24 bg-[var(--line)] rounded" />
+				</div>
+				<div className="h-3 w-12 bg-[var(--line)] rounded shrink-0" />
+			</div>
+		);
+	}
+
 	return (
 		<div className="max-w-3xl mx-auto px-8 py-10">
 			<Link
@@ -69,8 +81,8 @@ export default function MyPostsPage() {
 			)}
 
 			{loading ? (
-				<div className="flex justify-center py-16">
-					<div className="w-5 h-5 border-2 border-[var(--navy)] border-t-transparent rounded-full animate-spin" />
+				<div className="flex flex-col divide-y divide-[var(--line)] border border-[var(--line)] rounded-xl overflow-hidden">
+					{Array.from({ length: 4 }).map((_, i) => <PostSkeleton key={i} />)}
 				</div>
 			) : posts.length === 0 ? (
 				<p className="text-[var(--ink-soft)] text-sm py-16 text-center">
