@@ -35,7 +35,7 @@ export default function DashboardMobileHeader() {
 	useEffect(() => {
 		setSiteUrl(
 			process.env.NEXT_PUBLIC_SITE_URL ??
-			`${window.location.protocol}//${window.location.hostname}:3000`
+			(window.location.hostname === "localhost" ? "http://localhost:3000" : "")
 		);
 	}, []);
 
