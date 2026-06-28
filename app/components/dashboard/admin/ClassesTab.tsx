@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import * as XLSX from "xlsx";
 import { useApiFetch } from "@/app/hooks/useApiFetch";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ApiError } from "@/app/lib/api";
@@ -526,6 +527,10 @@ function SessionDetailView({
 	const [addScore,         setAddScore]         = useState("");
 	const [editingId,        setEditingId]        = useState<number | null>(null);
 	const [editScore,        setEditScore]        = useState("");
+	const [showImport,       setShowImport]       = useState(false);
+	const [importRows,       setImportRows]       = useState<{ student_id: number; participation_score: number | null; _name: string }[]>([]);
+	const [importing,        setImporting]        = useState(false);
+	const fileInputRef = useRef<HTMLInputElement>(null);
 
 	const toast = (text: string, ok = true) => { setMsg({ text, ok }); setTimeout(() => setMsg(null), 3000); };
 
@@ -575,6 +580,61 @@ function SessionDetailView({
 		} catch (err) { toast(err instanceof ApiError ? JSON.stringify(err.data) : "Error", false); }
 	};
 
+	const handleDownloadTemplate = () => {
+		const rows: (string | number)[][] = [
+			["student_id", "student_name", "participation_score"],
+			...enrolledStudents.map(s => [s.id, `${s.fname} ${s.lname}`, ""]),
+		];
+		const ws = XLSX.utils.aoa_to_sheet(rows);
+		ws["!cols"] = [{ wch: 12 }, { wch: 24 }, { wch: 20 }];
+		const wb = XLSX.utils.book_new();
+		XLSX.utils.book_append_sheet(wb, ws, "Attendance");
+		XLSX.writeFile(wb, `attendance-session-${sessionId}-${sessionDate}.xlsx`);
+	};
+
+	const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+		const file = e.target.files?.[0];
+		if (!file) return;
+		const data = await file.arrayBuffer();
+		const wb = XLSX.read(data);
+		const ws = wb.Sheets[wb.SheetNames[0]];
+		const rawRows = XLSX.utils.sheet_to_json<Record<string, unknown>>(ws);
+		const parsed = rawRows
+			.map(r => ({
+				student_id:          Number(r["student_id"]),
+				participation_score: r["participation_score"] !== undefined && r["participation_score"] !== ""
+					? Number(r["participation_score"])
+					: null,
+				_name: String(r["student_name"] ?? ""),
+			}))
+			.filter(r => !isNaN(r.student_id) && r.student_id > 0);
+		setImportRows(parsed);
+	};
+
+	const handleImport = async () => {
+		if (!importRows.length) return;
+		setImporting(true);
+		try {
+			await apiFetch("/admin/import-sessions", {
+				method: "POST",
+				body: JSON.stringify({
+					class_session_id: sessionId,
+					records: importRows.map(({ student_id, participation_score }) => ({ student_id, participation_score })),
+				}),
+			});
+			const n = importRows.length;
+			toast(`Imported ${n} record${n !== 1 ? "s" : ""}.`);
+			setImportRows([]);
+			setShowImport(false);
+			if (fileInputRef.current) fileInputRef.current.value = "";
+			await refresh();
+		} catch (err) {
+			toast(err instanceof ApiError ? JSON.stringify(err.data) : "Import failed.", false);
+		} finally {
+			setImporting(false);
+		}
+	};
+
 	const markedIds = new Set(attendance.map(a => a.student_id));
 	const unmarkedStudents = enrolledStudents.filter(s => !markedIds.has(s.id));
 	const studentMap = Object.fromEntries(enrolledStudents.map(s => [s.id, s]));
@@ -585,6 +645,13 @@ function SessionDetailView({
 		<div className="flex flex-col min-h-[calc(100vh-56px)] md:min-h-screen">
 			<div className="border-b border-[#d4c9b0] bg-[#ede8df] px-6 py-3 flex items-center gap-3 shrink-0">
 				<button onClick={onBack} className="text-[#5b6072] hover:text-[#0D0F14] transition-colors text-sm">← Back</button>
+				<div className="flex-1" />
+				<button
+					onClick={() => { setShowImport(v => !v); setImportRows([]); if (fileInputRef.current) fileInputRef.current.value = ""; }}
+					className={`rounded-lg px-4 py-1.5 text-sm font-medium transition-colors border ${showImport ? "bg-[#D4AF37] border-[#D4AF37] text-[#0D0F14]" : "border-[#D4AF37]/70 text-[#D4AF37] hover:bg-[#D4AF37]/10"}`}
+				>
+					Import Attendance
+				</button>
 			</div>
 
 			<div className="flex-1 p-6 overflow-auto flex flex-col gap-6">
@@ -595,6 +662,63 @@ function SessionDetailView({
 					{ label: className, onClick: onBack },
 					{ label: sessionDate },
 				]} />
+
+				{showImport && (
+					<div className="bg-white rounded-xl border border-[#D4AF37]/30 p-5 flex flex-col gap-4 max-w-xl">
+						<div className="flex items-center justify-between">
+							<h4 className="text-xs font-semibold uppercase tracking-wider text-[#5b6072]">Bulk Import Attendance</h4>
+							<button
+								onClick={handleDownloadTemplate}
+								className="text-xs text-[#D4AF37] hover:underline font-medium flex items-center gap-1"
+							>
+								↓ Download Template
+							</button>
+						</div>
+
+						<div className="flex flex-col gap-1.5">
+							<label className="text-xs font-semibold text-[#0D0F14]/60 uppercase tracking-wide">Upload filled sheet (.xlsx)</label>
+							<input
+								ref={fileInputRef}
+								type="file"
+								accept=".xlsx,.xls"
+								onChange={handleFileChange}
+								className="text-sm text-[#0D0F14] file:mr-3 file:rounded-lg file:border-0 file:bg-[#D4AF37]/10 file:px-3 file:py-1.5 file:text-xs file:font-semibold file:text-[#0D0F14] hover:file:bg-[#D4AF37]/20 file:cursor-pointer cursor-pointer"
+							/>
+						</div>
+
+						{importRows.length > 0 && (
+							<>
+								<div className="overflow-x-auto">
+									<table className="w-full text-sm border-collapse">
+										<thead>
+											<tr className="border-b border-[#D4AF37]/40 text-left">
+												<th className="py-1.5 pr-4 text-[#0D0F14]/50 font-medium">Student</th>
+												<th className="py-1.5 pr-4 text-[#0D0F14]/50 font-medium">student_id</th>
+												<th className="py-1.5 text-[#0D0F14]/50 font-medium">participation_score</th>
+											</tr>
+										</thead>
+										<tbody>
+											{importRows.map((r, i) => (
+												<tr key={i} className="border-b border-[#0D0F14]/8">
+													<td className="py-2 pr-4 text-[#0D0F14]">{r._name || <span className="text-[#0D0F14]/30">—</span>}</td>
+													<td className="py-2 pr-4 text-[#0D0F14]/60 font-mono text-xs">{r.student_id}</td>
+													<td className="py-2 text-[#0D0F14]/60">{r.participation_score ?? <span className="text-[#0D0F14]/30">—</span>}</td>
+												</tr>
+											))}
+										</tbody>
+									</table>
+								</div>
+								<button
+									onClick={handleImport}
+									disabled={importing}
+									className={btnCls + " self-start disabled:opacity-50"}
+								>
+									{importing ? "Importing…" : `Import ${importRows.length} record${importRows.length !== 1 ? "s" : ""}`}
+								</button>
+							</>
+						)}
+					</div>
+				)}
 
 				{unmarkedStudents.length > 0 && (
 					<div className="bg-white rounded-xl border border-[#D4AF37]/30 p-5 max-w-md">

@@ -49,7 +49,7 @@ export default function DashboardSidebar() {
 					Profile
 				</Link>
 				<Link href="/dashboard/community/posts" className={navCls(is("/dashboard/community/posts"))}>
-					Posts
+					Activity
 				</Link>
 
 				<SectionLabel>Academics</SectionLabel>

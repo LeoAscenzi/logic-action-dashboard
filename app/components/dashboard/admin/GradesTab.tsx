@@ -6,16 +6,16 @@ import { ApiError } from "@/app/lib/api";
 
 interface Student { id: number; fname: string; lname: string; }
 interface Class   { id: number; class_name: string; }
-interface Exam    { id: number; student_id: number; class_id: number | null; score: number; max_score: number; type: string; exam_date: string; }
+interface Exam    { id: number; student_id: number; class_id: number | null; title: string; score: number; max_score: number; type: string; exam_date: string; }
 
-const EXAM_TYPES = ["SAT", "SSAT", "AP"];
+const GRADE_TYPES = ["exam", "homework"];
 
 type Action = "add-grade" | "edit-grade" | null;
 
 const inputCls  = "rounded-lg border border-[#D4AF37]/60 bg-white/70 px-3 py-2 text-sm text-[#0D0F14] placeholder:text-[#0D0F14]/40 focus:outline-none focus:ring-1 focus:ring-[#D4AF37]";
 const btnCls    = "rounded-lg bg-[#D4AF37] px-4 py-2 text-sm font-semibold text-[#0D0F14] hover:bg-[#c4a230] transition-colors";
-const emptyAdd  = { student_id: "", class_id: "", score: "", max_score: "", type: "SAT", exam_date: "" };
-const emptyEdit = { score: "", max_score: "", type: "SAT", exam_date: "" };
+const emptyAdd  = { student_id: "", class_id: "", title: "", score: "", max_score: "", type: "exam", exam_date: "" };
+const emptyEdit = { title: "", score: "", max_score: "", type: "exam", exam_date: "" };
 
 export default function GradesTab() {
 	const apiFetch = useApiFetch();
@@ -32,8 +32,8 @@ export default function GradesTab() {
 	const [selected,        setSelected]        = useState<Set<number>>(new Set());
 	const [msg,             setMsg]             = useState<{ text: string; ok: boolean } | null>(null);
 
-	const [addForm,  setAddForm]  = useState(emptyAdd);
-	const [editForm, setEditForm] = useState(emptyEdit);
+	const [addForm,  setAddForm]  = useState<typeof emptyAdd>(emptyAdd);
+	const [editForm, setEditForm] = useState<typeof emptyEdit>(emptyEdit);
 
 	const headerCheckRef = useRef<HTMLInputElement>(null);
 
@@ -87,6 +87,7 @@ export default function GradesTab() {
 		if (key === "edit-grade" && selected.size === 1) {
 			const exam = grades.find(g => selected.has(g.id))!;
 			setEditForm({
+				title:     exam.title,
 				score:     String(exam.score),
 				max_score: String(exam.max_score),
 				type:      exam.type,
@@ -127,6 +128,7 @@ export default function GradesTab() {
 				body: JSON.stringify({
 					student_id: parseInt(addForm.student_id),
 					class_id:   addForm.class_id ? parseInt(addForm.class_id) : null,
+					title:      addForm.title,
 					score:      parseFloat(addForm.score),
 					max_score:  parseFloat(addForm.max_score),
 					type:       addForm.type,
@@ -148,6 +150,7 @@ export default function GradesTab() {
 			await apiFetch(`/admin/update-grade/${examId}`, {
 				method: "PATCH",
 				body: JSON.stringify({
+					title:     editForm.title || undefined,
 					score:     parseFloat(editForm.score),
 					max_score: parseFloat(editForm.max_score),
 					type:      editForm.type,
@@ -213,13 +216,14 @@ export default function GradesTab() {
 								<option value="">No class (optional)</option>
 								{classes.map(c => <option key={c.id} value={c.id}>{c.class_name}</option>)}
 							</select>
+							<input className={inputCls} placeholder="Title (e.g. HW 3, Midterm)" value={addForm.title} onChange={e => setAddForm(f => ({ ...f, title: e.target.value }))} />
+							<select className={inputCls} value={addForm.type} onChange={e => setAddForm(f => ({ ...f, type: e.target.value }))} required>
+								{GRADE_TYPES.map(t => <option key={t} value={t} className="capitalize">{t}</option>)}
+							</select>
 							<div className="flex gap-3">
 								<input className={inputCls + " flex-1"} type="number" step="0.01" placeholder="Score"     value={addForm.score}     onChange={e => setAddForm(f => ({ ...f, score:     e.target.value }))} required />
 								<input className={inputCls + " flex-1"} type="number" step="0.01" placeholder="Max score" value={addForm.max_score} onChange={e => setAddForm(f => ({ ...f, max_score: e.target.value }))} required />
 							</div>
-							<select className={inputCls} value={addForm.type} onChange={e => setAddForm(f => ({ ...f, type: e.target.value }))} required>
-								{EXAM_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
-							</select>
 							<input className={inputCls} type="date" value={addForm.exam_date} onChange={e => setAddForm(f => ({ ...f, exam_date: e.target.value }))} required />
 							<button className={btnCls} type="submit">Add Grade</button>
 						</form>
@@ -229,13 +233,14 @@ export default function GradesTab() {
 				{action === "edit-grade" && selected.size === 1 && (
 					<div className="bg-white rounded-xl border border-[#D4AF37]/30 p-5 max-w-md">
 						<form onSubmit={handleEditGrade} className="flex flex-col gap-3">
+							<input className={inputCls} placeholder="Title (e.g. HW 3, Midterm)" value={editForm.title} onChange={e => setEditForm(f => ({ ...f, title: e.target.value }))} />
+							<select className={inputCls} value={editForm.type} onChange={e => setEditForm(f => ({ ...f, type: e.target.value }))} required>
+								{GRADE_TYPES.map(t => <option key={t} value={t} className="capitalize">{t}</option>)}
+							</select>
 							<div className="flex gap-3">
 								<input className={inputCls + " flex-1"} type="number" step="0.01" placeholder="Score"     value={editForm.score}     onChange={e => setEditForm(f => ({ ...f, score:     e.target.value }))} required />
 								<input className={inputCls + " flex-1"} type="number" step="0.01" placeholder="Max score" value={editForm.max_score} onChange={e => setEditForm(f => ({ ...f, max_score: e.target.value }))} required />
 							</div>
-							<select className={inputCls} value={editForm.type} onChange={e => setEditForm(f => ({ ...f, type: e.target.value }))} required>
-								{EXAM_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
-							</select>
 							<input className={inputCls} type="date" value={editForm.exam_date} onChange={e => setEditForm(f => ({ ...f, exam_date: e.target.value }))} required />
 							<button className={btnCls} type="submit">Save Changes</button>
 						</form>
@@ -284,6 +289,7 @@ export default function GradesTab() {
 										</th>
 										<th className="py-2 pr-4 text-[#0D0F14]/50 font-medium">ID</th>
 										<th className="py-2 pr-4 text-[#0D0F14]/50 font-medium">Type</th>
+										<th className="py-2 pr-4 text-[#0D0F14]/50 font-medium">Title</th>
 										<th className="py-2 pr-4 text-[#0D0F14]/50 font-medium">Score</th>
 										<th className="py-2 pr-4 text-[#0D0F14]/50 font-medium">Max</th>
 										<th className="py-2 pr-4 text-[#0D0F14]/50 font-medium">Date</th>
@@ -312,7 +318,8 @@ export default function GradesTab() {
 													/>
 												</td>
 												<td className="py-2.5 pr-4 text-[#0D0F14]/40 text-xs">{g.id}</td>
-												<td className="py-2.5 pr-4 font-medium text-[#0D0F14]">{g.type}</td>
+												<td className="py-2.5 pr-4 font-medium text-[#0D0F14] capitalize">{g.type}</td>
+												<td className="py-2.5 pr-4 text-[#0D0F14]">{g.title || <span className="text-[#0D0F14]/30">—</span>}</td>
 												<td className="py-2.5 pr-4 text-[#0D0F14]">{g.score}</td>
 												<td className="py-2.5 pr-4 text-[#0D0F14]/60">{g.max_score}</td>
 												<td className="py-2.5 pr-4 text-[#0D0F14]/60">{g.exam_date}</td>

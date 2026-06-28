@@ -67,7 +67,7 @@ export default function DashboardMobileHeader() {
 
 				<SectionLabel>Community</SectionLabel>
 				<Link href="/dashboard/community/profile" className={navCls(is("/dashboard/community/profile"))}>Profile</Link>
-				<Link href="/dashboard/community/posts" className={navCls(is("/dashboard/community/posts"))}>Posts</Link>
+				<Link href="/dashboard/community/posts" className={navCls(is("/dashboard/community/posts"))}>Activity</Link>
 
 				<SectionLabel>Academics</SectionLabel>
 				{user?.role === "admin" && (
