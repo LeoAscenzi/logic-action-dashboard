@@ -121,7 +121,7 @@ export default function PaymentsTab() {
 	const [showPaymentForm, setShowPaymentForm]   = useState(false);
 
 	const emptyInvoice = { student_id: "", due_date: "", memo: "", line_items: [{ description: "", amount: "" }] };
-	const emptyPayment = { student_id: "", invoice_id: "", amount: "", method: "cash" as const, received_at: "", memo: "", external_reference: "" };
+	const emptyPayment = { student_id: "", invoice_id: "", amount: "", method: "cash" as typeof METHODS[number], received_at: "", memo: "", external_reference: "" };
 
 	const [invoiceForm, setInvoiceForm] = useState(emptyInvoice);
 	const [paymentForm, setPaymentForm] = useState(emptyPayment);
