@@ -7,6 +7,7 @@ import { useApiFetch } from "@/app/hooks/useApiFetch";
 interface Exam {
 	id: number;
 	type: string;
+	title: string;
 	score: number;
 	max_score: number;
 	exam_date: string;
@@ -76,6 +77,7 @@ export default function StudentDetailPage({ params }: { params: Promise<{ studen
 								<thead>
 									<tr className="border-b border-[#D4AF37]/40 text-left">
 										<th className="py-2 pr-4 text-[#0D0F14]/50 font-medium">Type</th>
+										<th className="py-2 pr-4 text-[#0D0F14]/50 font-medium">Title</th>
 										<th className="py-2 pr-4 text-[#0D0F14]/50 font-medium">Score</th>
 										<th className="py-2 pr-4 text-[#0D0F14]/50 font-medium">Max</th>
 										<th className="py-2 text-[#0D0F14]/50 font-medium">Date</th>
@@ -84,7 +86,8 @@ export default function StudentDetailPage({ params }: { params: Promise<{ studen
 								<tbody>
 									{grades.map((g) => (
 										<tr key={g.id} className="border-b border-[#0D0F14]/8 hover:bg-white/40 transition-colors">
-											<td className="py-2.5 pr-4 uppercase font-semibold text-[#0D0F14]">{g.type}</td>
+											<td className="py-2.5 pr-4 capitalize font-semibold text-[#0D0F14]">{g.type}</td>
+											<td className="py-2.5 pr-4 text-[#0D0F14]">{g.title || <span className="text-[#0D0F14]/30">—</span>}</td>
 											<td className="py-2.5 pr-4 text-[#0D0F14]">{g.score}</td>
 											<td className="py-2.5 pr-4 text-[#0D0F14]/60">{g.max_score}</td>
 											<td className="py-2.5 text-[#0D0F14]/60">{g.exam_date}</td>

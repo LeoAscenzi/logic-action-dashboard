@@ -10,6 +10,11 @@ export interface AuthUser {
 	role: UserRole;
 	fname: string;
 	lname: string;
+	email: string;
+	avatar_url?: string | null;
+	email_grades?: boolean;
+	email_announcements?: boolean;
+	email_events?: boolean;
 }
 
 interface AuthContextValue {
@@ -19,15 +24,17 @@ interface AuthContextValue {
 	login: (username: string, password: string) => Promise<AuthUser>;
 	logout: () => Promise<void>;
 	refreshTokens: () => Promise<string | null>;
+	updateUser: (patch: Partial<AuthUser>) => void;
 }
 
 const AuthContext = createContext<AuthContextValue>({
 	user: null,
 	accessToken: null,
 	isLoading: true,
-	login: async () => ({ id: 0, role: "parent" as const, fname: "", lname: "" }),
+	login: async () => ({ id: 0, role: "parent" as const, fname: "", lname: "", email: "" }),
 	logout: async () => {},
 	refreshTokens: async () => null,
+	updateUser: () => {},
 });
 
 type TabMessage =
@@ -112,6 +119,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
 		refreshTimerRef.current = setTimeout(async () => {
 			if (tokenRef.current) return;
+
+			// Token handoff from site when navigating cross-domain (no shared cookie)
+			const params = new URLSearchParams(window.location.search);
+			const handoffToken = params.get("token");
+			if (handoffToken) {
+				const url = new URL(window.location.href);
+				url.searchParams.delete("token");
+				window.history.replaceState({}, "", url.toString());
+				try {
+					const profile = await fetchMe(handoffToken);
+					setAccessToken(handoffToken);
+					setUser(profile);
+					broadcast({ type: "TOKEN", token: handoffToken, user: profile });
+				} catch { /* invalid token, fall through unauthenticated */ } finally {
+					setIsLoading(false);
+				}
+				return;
+			}
+
 			try {
 				const token = await refreshTokens();
 				if (token) {
@@ -168,8 +194,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 		}
 	};
 
+	const updateUser = (patch: Partial<AuthUser>) => {
+		setUser((prev) => {
+			if (!prev) return prev;
+			const updated = { ...prev, ...patch };
+			if (tokenRef.current) broadcast({ type: "TOKEN", token: tokenRef.current, user: updated });
+			return updated;
+		});
+	};
+
 	return (
-		<AuthContext.Provider value={{ user, accessToken, isLoading, login, logout, refreshTokens }}>
+		<AuthContext.Provider value={{ user, accessToken, isLoading, login, logout, refreshTokens, updateUser }}>
 			{children}
 		</AuthContext.Provider>
 	);

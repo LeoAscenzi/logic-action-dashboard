@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useApiFetch } from "@/app/hooks/useApiFetch";
 import { ApiError } from "@/app/lib/api";
 
@@ -18,16 +18,26 @@ export default function TeachersTab() {
 	const [loading,  setLoading]  = useState(true);
 	const [action,   setAction]   = useState<Action>(null);
 	const [form,     setForm]     = useState(emptyForm);
+	const [selected, setSelected] = useState<Set<number>>(new Set());
 	const [msg,      setMsg]      = useState<{ text: string; ok: boolean } | null>(null);
+
+	const headerCheckRef = useRef<HTMLInputElement>(null);
 
 	const refresh = async () => {
 		const t = await apiFetch<Teacher[]>("/admin/teachers");
 		setTeachers(t);
+		setSelected(new Set());
 	};
 
 	useEffect(() => {
 		refresh().finally(() => setLoading(false));  // eslint-disable-line react-hooks/set-state-in-effect
 	}, []);  // eslint-disable-line react-hooks/exhaustive-deps
+
+	useEffect(() => {
+		if (headerCheckRef.current) {
+			headerCheckRef.current.indeterminate = selected.size > 0 && selected.size < teachers.length;
+		}
+	}, [selected, teachers]);
 
 	const toast = (text: string, ok = true) => {
 		setMsg({ text, ok });
@@ -35,6 +45,22 @@ export default function TeachersTab() {
 	};
 
 	const toggle = (key: Action) => setAction(a => a === key ? null : key);
+
+	const toggleRow = (id: number) => {
+		setSelected(prev => {
+			const next = new Set(prev);
+			if (next.has(id)) next.delete(id); else next.add(id);
+			return next;
+		});
+	};
+
+	const toggleAll = () => {
+		setSelected(prev =>
+			prev.size === teachers.length
+				? new Set()
+				: new Set(teachers.map(t => t.id))
+		);
+	};
 
 	const handleCreate = async (e: React.FormEvent) => {
 		e.preventDefault();
@@ -49,6 +75,23 @@ export default function TeachersTab() {
 			await refresh();
 		} catch (err) {
 			toast(err instanceof ApiError ? JSON.stringify(err.data) : "Error", false);
+		}
+	};
+
+	const handleDeleteSelected = async () => {
+		if (selected.size === 0) return;
+		const plural = selected.size > 1 ? "s" : "";
+		if (!confirm(`Delete ${selected.size} teacher${plural}? This cannot be undone.`)) return;
+		try {
+			await Promise.all(
+				Array.from(selected).map(id =>
+					apiFetch(`/admin/delete-teacher/${id}`, { method: "DELETE" })
+				)
+			);
+			toast(`Deleted ${selected.size} teacher${plural}.`);
+			await refresh();
+		} catch (err) {
+			toast(err instanceof ApiError ? "Failed to delete." : "Error", false);
 		}
 	};
 
@@ -70,6 +113,15 @@ export default function TeachersTab() {
 				>
 					Create Teacher
 				</button>
+				<div className="flex-1" />
+				{selected.size > 0 && (
+					<button
+						onClick={handleDeleteSelected}
+						className="rounded-lg px-4 py-1.5 text-sm font-medium transition-colors border border-red-400/70 text-red-600 hover:bg-red-50"
+					>
+						Delete ({selected.size})
+					</button>
+				)}
 			</div>
 
 			{/* Content */}
@@ -103,6 +155,15 @@ export default function TeachersTab() {
 						<table className="w-full text-sm border-collapse">
 							<thead>
 								<tr className="border-b border-[#D4AF37]/40 text-left">
+									<th className="py-2 pr-3 w-8">
+										<input
+											ref={headerCheckRef}
+											type="checkbox"
+											checked={selected.size === teachers.length && teachers.length > 0}
+											onChange={toggleAll}
+											className="cursor-pointer accent-[#D4AF37]"
+										/>
+									</th>
 									<th className="py-2 pr-4 text-[#0D0F14]/50 font-medium">ID</th>
 									<th className="py-2 pr-4 text-[#0D0F14]/50 font-medium">Name</th>
 									<th className="py-2 pr-4 text-[#0D0F14]/50 font-medium">Username</th>
@@ -110,14 +171,32 @@ export default function TeachersTab() {
 								</tr>
 							</thead>
 							<tbody>
-								{teachers.map(t => (
-									<tr key={t.id} className="border-b border-[#0D0F14]/8">
-										<td className="py-2.5 pr-4 text-[#0D0F14]/40 text-xs">{t.id}</td>
-										<td className="py-2.5 pr-4 font-medium text-[#0D0F14]">{t.fname} {t.lname}</td>
-										<td className="py-2.5 pr-4 text-[#0D0F14]/60">{t.username}</td>
-										<td className="py-2.5 text-[#0D0F14]/60">{t.email}</td>
-									</tr>
-								))}
+								{teachers.map(t => {
+									const isSel = selected.has(t.id);
+									return (
+										<tr
+											key={t.id}
+											onClick={() => toggleRow(t.id)}
+											className={`border-b border-[#0D0F14]/8 cursor-pointer transition-colors ${
+												isSel ? "bg-[#D4AF37]/10" : "hover:bg-white/40"
+											}`}
+										>
+											<td className="py-2.5 pr-3">
+												<input
+													type="checkbox"
+													checked={isSel}
+													onChange={() => toggleRow(t.id)}
+													onClick={e => e.stopPropagation()}
+													className="cursor-pointer accent-[#D4AF37]"
+												/>
+											</td>
+											<td className="py-2.5 pr-4 text-[#0D0F14]/40 text-xs">{t.id}</td>
+											<td className="py-2.5 pr-4 font-medium text-[#0D0F14]">{t.fname} {t.lname}</td>
+											<td className="py-2.5 pr-4 text-[#0D0F14]/60">{t.username}</td>
+											<td className="py-2.5 text-[#0D0F14]/60">{t.email}</td>
+										</tr>
+									);
+								})}
 							</tbody>
 						</table>
 					)}
