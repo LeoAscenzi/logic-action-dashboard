@@ -79,7 +79,7 @@ export default function EventsPage() {
 	const [error, setError] = useState("");
 	const [deleteId, setDeleteId] = useState<number | null>(null);
 	const [expandedRsvps, setExpandedRsvps] = useState<number | null>(null);
-	const [rsvpCache, setRsvpCache] = useState<Record<number, { name: string; email: string; created_at: string }[]>>({});
+	const [rsvpCache, setRsvpCache] = useState<Record<number, { id: number; name: string; email: string }[]>>({});
 	const [rsvpLoading, setRsvpLoading] = useState(false);
 
 	const loadEvents = useCallback(async () => {
@@ -106,13 +106,18 @@ export default function EventsPage() {
 		if (rsvpCache[eventId]) return;
 		setRsvpLoading(true);
 		try {
-			const data = await apiFetchRef.current<{ name: string; email: string; created_at: string }[]>(
+			const data = await apiFetchRef.current<{ id: number; name: string; email: string }[]>(
 				`/admin/events/${eventId}/registrations`
 			);
 			setRsvpCache(c => ({ ...c, [eventId]: data ?? [] }));
 		} finally {
 			setRsvpLoading(false);
 		}
+	}
+
+	async function removeRsvp(eventId: number, registrationId: number) {
+		await apiFetchRef.current(`/admin/events/${eventId}/registrations/${registrationId}`, { method: "DELETE" });
+		setRsvpCache(c => ({ ...c, [eventId]: (c[eventId] ?? []).filter(r => r.id !== registrationId) }));
 	}
 
 	function openCreate() {
@@ -357,10 +362,16 @@ export default function EventsPage() {
 												{registrations.length} attendee{registrations.length !== 1 ? "s" : ""}
 											</p>
 											<div className="flex flex-col gap-1">
-												{registrations.map((r, i) => (
-													<div key={i} className="flex items-center gap-3 text-sm">
+												{registrations.map(r => (
+													<div key={r.id} className="flex items-center gap-3 text-sm">
 														<span className="font-medium text-[var(--ink)] min-w-[140px]">{r.name}</span>
-														<a href={`mailto:${r.email}`} className="text-[var(--navy)] hover:underline">{r.email}</a>
+														<a href={`mailto:${r.email}`} className="text-[var(--navy)] hover:underline flex-1">{r.email}</a>
+														<button
+															onClick={() => removeRsvp(ev.id, r.id)}
+															className="shrink-0 text-xs text-red-500 hover:text-red-700 transition-colors"
+														>
+															Remove
+														</button>
 													</div>
 												))}
 											</div>
