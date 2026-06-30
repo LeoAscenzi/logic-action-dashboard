@@ -72,6 +72,22 @@ export default function ProfilePage() {
 		}
 	}
 
+	async function handleRemoveAvatar() {
+		if (!avatarUrl) return;
+		if (!confirm("Remove your profile photo?")) return;
+		setUploadingAvatar(true);
+		setError("");
+		try {
+			await apiFetchRef.current("/me/avatar", { method: "DELETE" });
+			setAvatarUrl("");
+			updateUser({ avatar_url: null });
+		} catch {
+			setError("Failed to remove photo. Please try again.");
+		} finally {
+			setUploadingAvatar(false);
+		}
+	}
+
 	const handleSubmit = async (e: FormEvent) => {
 		e.preventDefault();
 		setSaving(true);
@@ -122,11 +138,23 @@ export default function ProfilePage() {
 					)}
 				</div>
 				<div className="flex flex-col gap-1.5">
-					<label className="inline-flex items-center gap-2 cursor-pointer rounded-lg border border-[var(--line)] px-4 py-2 text-sm text-[var(--ink-soft)] hover:bg-[var(--cream)] transition-colors">
-						<input type="file" accept="image/*" className="hidden" onChange={handleAvatarChange} disabled={uploadingAvatar} />
-						{uploadingAvatar ? "Uploading…" : "Change Photo"}
-					</label>
-					<p className="text-xs text-[var(--ink-soft)]">JPG, PNG or GIF · Max 5MB</p>
+					<div className="flex items-center gap-2">
+						<label className="inline-flex items-center gap-2 cursor-pointer rounded-lg border border-[var(--line)] px-4 py-2 text-sm text-[var(--ink-soft)] hover:bg-[var(--cream)] transition-colors">
+							<input type="file" accept="image/jpeg,image/png,image/gif,image/webp" className="hidden" onChange={handleAvatarChange} disabled={uploadingAvatar} />
+							{uploadingAvatar ? "Uploading…" : avatarUrl ? "Change Photo" : "Upload Photo"}
+						</label>
+						{avatarUrl && (
+							<button
+								type="button"
+								onClick={handleRemoveAvatar}
+								disabled={uploadingAvatar}
+								className="rounded-lg border border-red-300 px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors disabled:opacity-50"
+							>
+								Remove
+							</button>
+						)}
+					</div>
+					<p className="text-xs text-[var(--ink-soft)]">JPG, PNG, GIF or WEBP · Max 5MB</p>
 				</div>
 			</div>
 

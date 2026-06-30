@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { useAuth } from "@/app/context/AuthContext";
 
 const SectionLabel = ({ children }: { children: string }) => (
-	<div className="text-[10px] font-semibold uppercase tracking-widest text-[#f5f0e8]/40 px-3 mt-5 mb-1">
+	<div className="text-[10px] font-semibold uppercase tracking-widest text-cream/40 px-3 mt-5 mb-1">
 		{children}
 	</div>
 );
@@ -14,8 +14,8 @@ const SectionLabel = ({ children }: { children: string }) => (
 const navCls = (active: boolean) =>
 	`rounded-lg px-3 py-2 text-sm transition-colors ${
 		active
-			? "bg-[#D4AF37]/15 text-[#D4AF37] font-medium"
-			: "text-[#f5f0e8]/80 hover:text-[#D4AF37] hover:bg-white/5"
+			? "bg-gold/15 text-gold font-medium"
+			: "text-cream/80 hover:text-gold hover:bg-white/5"
 	}`;
 
 export default function DashboardSidebar() {
@@ -38,15 +38,15 @@ export default function DashboardSidebar() {
 	};
 
 	return (
-		<aside className="hidden md:flex flex-col w-56 min-h-screen bg-[#0D0F14] border-r border-[#D4AF37]/30 p-6 gap-6">
+		<aside className="hidden md:flex flex-col w-56 min-h-screen bg-navy border-r border-gold/30 p-6 gap-6">
 			<a href={siteUrl} className="mb-2">
 				<Image src="/logo-light-main.png" alt="Logic Action" width={64} height={64} className="max-h-16 w-auto" priority />
 			</a>
 
 			{user && (
-				<div className="flex flex-col gap-1 pb-4 border-b border-[#D4AF37]/20">
-					<span className="font-semibold text-[#D4AF37]">{user.fname} {user.lname}</span>
-					<span className="text-xs text-[#f5f0e8]/50 capitalize tracking-wide">{user.role}</span>
+				<div className="flex flex-col gap-1 pb-4 border-b border-gold/20">
+					<span className="font-semibold text-gold">{user.fname} {user.lname}</span>
+					<span className="text-xs text-cream/50 capitalize tracking-wide">{user.role}</span>
 				</div>
 			)}
 
@@ -71,6 +71,7 @@ export default function DashboardSidebar() {
 						<Link href="/dashboard/admin/classes"  className={navCls(is("/dashboard/admin/classes"))}>Classes</Link>
 						<Link href="/dashboard/admin/grades"   className={navCls(is("/dashboard/admin/grades"))}>Grades</Link>
 						<Link href="/dashboard/admin/teachers" className={navCls(is("/dashboard/admin/teachers"))}>Teachers</Link>
+						<Link href="/dashboard/admin/parents"  className={navCls(is("/dashboard/admin/parents"))}>Parents</Link>
 						<Link href="/dashboard/admin/invites"  className={navCls(is("/dashboard/admin/invites"))}>Invites</Link>
 					</>
 				)}
@@ -94,7 +95,7 @@ export default function DashboardSidebar() {
 
 			<button
 				onClick={handleLogout}
-				className="rounded-lg border border-[#D4AF37]/50 px-3 py-2 text-sm text-[#D4AF37] hover:bg-[#D4AF37] hover:text-[#0D0F14] transition-colors font-medium"
+				className="rounded-lg border border-gold/50 px-3 py-2 text-sm text-gold hover:bg-gold hover:text-ink transition-colors font-medium"
 			>
 				Log Out
 			</button>

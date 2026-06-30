@@ -16,26 +16,26 @@ interface Exam       { id: number; student_id: number; class_id: number | null; 
 type View = "classes" | "class-detail" | "session" | "student-detail";
 type ClassTab = "sessions" | "students" | "grades";
 
-const inputCls = "rounded-lg border border-[#D4AF37]/60 bg-white/70 px-3 py-2 text-sm text-[#0D0F14] placeholder:text-[#0D0F14]/40 focus:outline-none focus:ring-1 focus:ring-[#D4AF37]";
-const btnCls   = "rounded-lg bg-[#D4AF37] px-4 py-2 text-sm font-semibold text-[#0D0F14] hover:bg-[#c4a230] transition-colors";
-const ghostBtn = "rounded-lg px-4 py-1.5 text-sm font-medium transition-colors border border-[#D4AF37]/70 text-[#D4AF37] hover:bg-[#D4AF37]/10";
-const backBtn  = "flex items-center gap-1.5 text-sm text-[#D4AF37] hover:text-[#c4a230] transition-colors mb-4";
+const inputCls = "rounded-lg border border-gold/60 bg-white/70 px-3 py-2 text-sm text-ink placeholder:text-ink/40 focus:outline-none focus:ring-1 focus:ring-gold";
+const btnCls   = "rounded-lg bg-gold px-4 py-2 text-sm font-semibold text-ink hover:bg-gold-light transition-colors";
+const ghostBtn = "rounded-lg px-4 py-1.5 text-sm font-medium transition-colors border border-gold/70 text-gold hover:bg-gold/10";
+const backBtn  = "flex items-center gap-1.5 text-sm text-gold hover:text-gold-light transition-colors mb-4";
 
 // ── Classes list view ──────────────────────────────────────────────────────────
 
 function ClassesView({ classes, onSelect }: { classes: Class[]; onSelect: (c: Class) => void }) {
-	if (classes.length === 0) return <p className="text-[#0D0F14]/50 text-sm p-6">No classes assigned to you yet.</p>;
+	if (classes.length === 0) return <p className="text-ink/50 text-sm p-6">No classes assigned to you yet.</p>;
 	return (
 		<div className="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
 			{classes.map(c => (
 				<button
 					key={c.id}
 					onClick={() => onSelect(c)}
-					className="text-left bg-white rounded-2xl border border-[#D4AF37]/30 p-5 hover:border-[#D4AF37] hover:shadow-md transition-all flex flex-col gap-2"
+					className="text-left bg-white rounded-2xl border border-gold/30 p-5 hover:border-gold hover:shadow-md transition-all flex flex-col gap-2"
 				>
-					<span className="font-semibold text-[#0D0F14]">{c.class_name}</span>
-					<span className="text-xs text-[#0D0F14]/50">{c.total_sessions} sessions · cap {c.capacity}</span>
-					<span className="text-xs text-[#0D0F14]/40">{c.start_date} → {c.end_date}</span>
+					<span className="font-semibold text-ink">{c.class_name}</span>
+					<span className="text-xs text-ink/50">{c.total_sessions} sessions · cap {c.capacity}</span>
+					<span className="text-xs text-ink/40">{c.start_date} → {c.end_date}</span>
 				</button>
 			))}
 		</div>
@@ -119,7 +119,7 @@ function GradesView({ class_: cls, students }: { class_: Class; students: Studen
 		}
 	};
 
-	if (loading) return <p className="text-[#0D0F14]/50 text-sm pt-4">Loading grades…</p>;
+	if (loading) return <p className="text-ink/50 text-sm pt-4">Loading grades…</p>;
 
 	return (
 		<div className="flex flex-col gap-4 mt-4">
@@ -137,7 +137,7 @@ function GradesView({ class_: cls, students }: { class_: Class; students: Studen
 			</div>
 
 			{showAdd && (
-				<div className="bg-white rounded-xl border border-[#D4AF37]/30 p-5 max-w-md">
+				<div className="bg-white rounded-xl border border-gold/30 p-5 max-w-md">
 					<form onSubmit={handleAdd} className="flex flex-col gap-3">
 						<select className={inputCls} value={addForm.student_id} onChange={e => setAddForm(f => ({ ...f, student_id: e.target.value }))} required>
 							<option value="">Select student</option>
@@ -159,18 +159,18 @@ function GradesView({ class_: cls, students }: { class_: Class; students: Studen
 			)}
 
 			{visible.length === 0 ? (
-				<p className="text-[#0D0F14]/50 text-sm">No grades recorded yet.</p>
+				<p className="text-ink/50 text-sm">No grades recorded yet.</p>
 			) : (
-				<table className="w-full text-sm border-collapse">
+				<div className="overflow-x-auto"><table className="w-full text-sm border-collapse">
 					<thead>
-						<tr className="border-b border-[#D4AF37]/40 text-left">
-							<th className="py-2 pr-4 text-[#0D0F14]/50 font-medium">Student</th>
-							<th className="py-2 pr-4 text-[#0D0F14]/50 font-medium">Type</th>
-							<th className="py-2 pr-4 text-[#0D0F14]/50 font-medium">Title</th>
-							<th className="py-2 pr-4 text-[#0D0F14]/50 font-medium">Score</th>
-							<th className="py-2 pr-4 text-[#0D0F14]/50 font-medium">Max</th>
-							<th className="py-2 pr-4 text-[#0D0F14]/50 font-medium">Date</th>
-							<th className="py-2 text-[#0D0F14]/50 font-medium"></th>
+						<tr className="border-b border-gold/40 text-left">
+							<th className="py-2 pr-4 text-ink/50 font-medium">Student</th>
+							<th className="py-2 pr-4 text-ink/50 font-medium">Type</th>
+							<th className="py-2 pr-4 text-ink/50 font-medium">Title</th>
+							<th className="py-2 pr-4 text-ink/50 font-medium">Score</th>
+							<th className="py-2 pr-4 text-ink/50 font-medium">Max</th>
+							<th className="py-2 pr-4 text-ink/50 font-medium">Date</th>
+							<th className="py-2 text-ink/50 font-medium"></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -178,13 +178,13 @@ function GradesView({ class_: cls, students }: { class_: Class; students: Studen
 							const student = studentMap[g.student_id];
 							const isEditing = editingId === g.id;
 							return (
-								<tr key={g.id} className="border-b border-[#0D0F14]/8">
-									<td className="py-2.5 pr-4 font-medium text-[#0D0F14]">
+								<tr key={g.id} className="border-b border-ink/8">
+									<td className="py-2.5 pr-4 font-medium text-ink">
 										{student ? `${student.fname} ${student.lname}` : `Student #${g.student_id}`}
 									</td>
-									<td className="py-2.5 pr-4 text-[#0D0F14]/60 capitalize">{g.type}</td>
-									<td className="py-2.5 pr-4 text-[#0D0F14]">{g.title || <span className="text-[#0D0F14]/30">—</span>}</td>
-									<td className="py-2.5 pr-4 text-[#0D0F14]">
+									<td className="py-2.5 pr-4 text-ink/60 capitalize">{g.type}</td>
+									<td className="py-2.5 pr-4 text-ink">{g.title || <span className="text-ink/30">—</span>}</td>
+									<td className="py-2.5 pr-4 text-ink">
 										{isEditing ? (
 											<input
 												className={inputCls + " w-24 py-1"}
@@ -199,15 +199,15 @@ function GradesView({ class_: cls, students }: { class_: Class; students: Studen
 										) : (
 											<span
 												onClick={() => { setEditingId(g.id); setEditScore(String(g.score)); }}
-												className="cursor-pointer hover:text-[#D4AF37] transition-colors"
+												className="cursor-pointer hover:text-gold transition-colors"
 												title="Click to edit score"
 											>
 												{g.score}
 											</span>
 										)}
 									</td>
-									<td className="py-2.5 pr-4 text-[#0D0F14]/60">{g.max_score}</td>
-									<td className="py-2.5 pr-4 text-[#0D0F14]/60">{g.exam_date}</td>
+									<td className="py-2.5 pr-4 text-ink/60">{g.max_score}</td>
+									<td className="py-2.5 pr-4 text-ink/60">{g.exam_date}</td>
 									<td className="py-2.5">
 										<button onClick={() => handleDelete(g.id)} className="text-xs text-red-500 hover:text-red-700 transition-colors">Delete</button>
 									</td>
@@ -215,7 +215,7 @@ function GradesView({ class_: cls, students }: { class_: Class; students: Studen
 							);
 						})}
 					</tbody>
-				</table>
+				</table></div>
 			)}
 		</div>
 	);
@@ -250,23 +250,23 @@ function ClassDetailView({
 		}).finally(() => setLoading(false));
 	}, [cls.id]);  // eslint-disable-line react-hooks/exhaustive-deps
 
-	if (loading) return <p className="p-6 text-[#0D0F14]/50">Loading…</p>;
+	if (loading) return <p className="p-6 text-ink/50">Loading…</p>;
 
 	return (
 		<div className="p-6 flex flex-col gap-4">
 			<button onClick={onBack} className={backBtn}>← Back to Classes</button>
-			<h2 className="text-xl font-semibold text-[#0D0F14]">{cls.class_name}</h2>
-			<p className="text-sm text-[#0D0F14]/50">{cls.start_date} → {cls.end_date} · {cls.total_sessions} sessions · cap {cls.capacity}</p>
+			<h2 className="text-xl font-semibold text-ink">{cls.class_name}</h2>
+			<p className="text-sm text-ink/50">{cls.start_date} → {cls.end_date} · {cls.total_sessions} sessions · cap {cls.capacity}</p>
 
-			<div className="flex gap-2 border-b border-[#D4AF37]/30 pb-0">
+			<div className="flex gap-2 border-b border-gold/30 pb-0">
 				{(["sessions", "students", "grades"] as const).map(t => (
 					<button
 						key={t}
 						onClick={() => setTab(t)}
 						className={`px-4 py-2 text-sm font-medium capitalize transition-colors border-b-2 -mb-px ${
 							tab === t
-								? "border-[#D4AF37] text-[#D4AF37]"
-								: "border-transparent text-[#0D0F14]/50 hover:text-[#0D0F14]"
+								? "border-gold text-gold"
+								: "border-transparent text-ink/50 hover:text-ink"
 						}`}
 					>
 						{t}
@@ -276,54 +276,54 @@ function ClassDetailView({
 
 			{tab === "sessions" && (
 				sessions.length === 0
-					? <p className="text-[#0D0F14]/50 text-sm">No sessions yet.</p>
-					: <table className="w-full text-sm border-collapse mt-2">
+					? <p className="text-ink/50 text-sm">No sessions yet.</p>
+					: <div className="overflow-x-auto"><table className="w-full text-sm border-collapse mt-2">
 						<thead>
-							<tr className="border-b border-[#D4AF37]/40 text-left">
-								<th className="py-2 pr-4 text-[#0D0F14]/50 font-medium">Date</th>
-								<th className="py-2 pr-4 text-[#0D0F14]/50 font-medium">Duration</th>
-								<th className="py-2 text-[#0D0F14]/50 font-medium"></th>
+							<tr className="border-b border-gold/40 text-left">
+								<th className="py-2 pr-4 text-ink/50 font-medium">Date</th>
+								<th className="py-2 pr-4 text-ink/50 font-medium">Duration</th>
+								<th className="py-2 text-ink/50 font-medium"></th>
 							</tr>
 						</thead>
 						<tbody>
 							{sessions.map(s => (
-								<tr key={s.id} className="border-b border-[#0D0F14]/8">
-									<td className="py-2.5 pr-4 font-medium text-[#0D0F14]">{s.class_date}</td>
-									<td className="py-2.5 pr-4 text-[#0D0F14]/60">{s.class_duration} min</td>
+								<tr key={s.id} className="border-b border-ink/8">
+									<td className="py-2.5 pr-4 font-medium text-ink">{s.class_date}</td>
+									<td className="py-2.5 pr-4 text-ink/60">{s.class_duration} min</td>
 									<td className="py-2.5">
-										<button onClick={() => onSession(s)} className="text-xs text-[#D4AF37] hover:text-[#c4a230] font-medium transition-colors">
+										<button onClick={() => onSession(s)} className="text-xs text-gold hover:text-gold-light font-medium transition-colors">
 											Attendance →
 										</button>
 									</td>
 								</tr>
 							))}
 						</tbody>
-					</table>
+					</table></div>
 			)}
 
 			{tab === "students" && (
 				students.length === 0
-					? <p className="text-[#0D0F14]/50 text-sm">No students enrolled in this class yet.</p>
-					: <table className="w-full text-sm border-collapse mt-2">
+					? <p className="text-ink/50 text-sm">No students enrolled in this class yet.</p>
+					: <div className="overflow-x-auto"><table className="w-full text-sm border-collapse mt-2">
 						<thead>
-							<tr className="border-b border-[#D4AF37]/40 text-left">
-								<th className="py-2 pr-4 text-[#0D0F14]/50 font-medium">Name</th>
-								<th className="py-2 text-[#0D0F14]/50 font-medium"></th>
+							<tr className="border-b border-gold/40 text-left">
+								<th className="py-2 pr-4 text-ink/50 font-medium">Name</th>
+								<th className="py-2 text-ink/50 font-medium"></th>
 							</tr>
 						</thead>
 						<tbody>
 							{students.map(s => (
-								<tr key={s.id} className="border-b border-[#0D0F14]/8">
-									<td className="py-2.5 pr-4 font-medium text-[#0D0F14]">{s.fname} {s.lname}</td>
+								<tr key={s.id} className="border-b border-ink/8">
+									<td className="py-2.5 pr-4 font-medium text-ink">{s.fname} {s.lname}</td>
 									<td className="py-2.5">
-										<button onClick={() => onStudent(s)} className="text-xs text-[#D4AF37] hover:text-[#c4a230] font-medium transition-colors">
+										<button onClick={() => onStudent(s)} className="text-xs text-gold hover:text-gold-light font-medium transition-colors">
 											View →
 										</button>
 									</td>
 								</tr>
 							))}
 						</tbody>
-					</table>
+					</table></div>
 			)}
 
 			{tab === "grades" && <GradesView class_={cls} students={students} />}
@@ -355,27 +355,27 @@ function StudentDetailView({
 	return (
 		<div className="p-6 flex flex-col gap-4">
 			<button onClick={onBack} className={backBtn}>← Back</button>
-			<h2 className="text-xl font-semibold text-[#0D0F14]">{student.fname} {student.lname}</h2>
+			<h2 className="text-xl font-semibold text-ink">{student.fname} {student.lname}</h2>
 
 			<div>
-				<h3 className="text-xs font-semibold uppercase tracking-widest text-[#5b6072] mb-3">Your Shared Classes</h3>
+				<h3 className="text-xs font-semibold uppercase tracking-widest text-ink-soft mb-3">Your Shared Classes</h3>
 				{loading ? (
-					<p className="text-[#0D0F14]/50 text-sm">Loading…</p>
+					<p className="text-ink/50 text-sm">Loading…</p>
 				) : sharedClasses.length === 0 ? (
-					<p className="text-[#0D0F14]/50 text-sm">No shared classes found.</p>
+					<p className="text-ink/50 text-sm">No shared classes found.</p>
 				) : (
 					<div className="flex flex-col gap-2 max-w-md">
 						{sharedClasses.map(c => (
 							<button
 								key={c.id}
 								onClick={() => onGoToClass(c)}
-								className="flex items-center justify-between bg-white rounded-xl border border-[#D4AF37]/30 px-5 py-3.5 hover:border-[#D4AF37] hover:shadow-sm transition-all text-left"
+								className="flex items-center justify-between bg-white rounded-xl border border-gold/30 px-5 py-3.5 hover:border-gold hover:shadow-sm transition-all text-left"
 							>
 								<div>
-									<p className="font-medium text-[#0D0F14] text-sm">{c.class_name}</p>
-									<p className="text-xs text-[#0D0F14]/50 mt-0.5">{c.start_date} → {c.end_date}</p>
+									<p className="font-medium text-ink text-sm">{c.class_name}</p>
+									<p className="text-xs text-ink/50 mt-0.5">{c.start_date} → {c.end_date}</p>
 								</div>
-								<span className="text-[#D4AF37] text-sm">→</span>
+								<span className="text-gold text-sm">→</span>
 							</button>
 						))}
 					</div>
@@ -528,18 +528,18 @@ function SessionView({
 		}
 	};
 
-	if (loading) return <p className="p-6 text-[#0D0F14]/50">Loading…</p>;
+	if (loading) return <p className="p-6 text-ink/50">Loading…</p>;
 
 	const studentMap = Object.fromEntries(students.map(s => [s.id, s]));
 
 	return (
 		<div className="flex flex-col min-h-[calc(100vh-56px)] md:min-h-screen">
-			<div className="border-b border-[#d4c9b0] bg-[#ede8df] px-6 py-3 flex items-center gap-3 shrink-0">
-				<button onClick={onBack} className="text-[#5b6072] hover:text-[#0D0F14] transition-colors text-sm">← Back</button>
+			<div className="border-b border-cream-dim bg-[#ede8df] px-6 py-3 flex items-center gap-3 shrink-0">
+				<button onClick={onBack} className="text-ink-soft hover:text-ink transition-colors text-sm">← Back</button>
 				<div className="flex-1" />
 				<button
 					onClick={() => { setShowImport(v => !v); setImportRows([]); if (fileInputRef.current) fileInputRef.current.value = ""; }}
-					className={`rounded-lg px-4 py-1.5 text-sm font-medium transition-colors border ${showImport ? "bg-[#D4AF37] border-[#D4AF37] text-[#0D0F14]" : "border-[#D4AF37]/70 text-[#D4AF37] hover:bg-[#D4AF37]/10"}`}
+					className={`rounded-lg px-4 py-1.5 text-sm font-medium transition-colors border ${showImport ? "bg-gold border-gold text-ink" : "border-gold/70 text-gold hover:bg-gold/10"}`}
 				>
 					Import Attendance
 				</button>
@@ -550,50 +550,48 @@ function SessionView({
 
 				<div>
 					<button onClick={onBack} className={backBtn}>← Back to {cls.class_name}</button>
-					<h2 className="text-xl font-semibold text-[#0D0F14]">Session — {session.class_date}</h2>
-					<p className="text-sm text-[#0D0F14]/50">{session.class_duration} min · {cls.class_name}</p>
+					<h2 className="text-xl font-semibold text-ink">Session — {session.class_date}</h2>
+					<p className="text-sm text-ink/50">{session.class_duration} min · {cls.class_name}</p>
 				</div>
 
 				{showImport && (
-					<div className="bg-white rounded-xl border border-[#D4AF37]/30 p-5 flex flex-col gap-4 max-w-xl">
+					<div className="bg-white rounded-xl border border-gold/30 p-5 flex flex-col gap-4 max-w-xl">
 						<div className="flex items-center justify-between">
-							<h4 className="text-xs font-semibold uppercase tracking-wider text-[#5b6072]">Bulk Import Attendance</h4>
-							<button onClick={handleDownloadTemplate} className="text-xs text-[#D4AF37] hover:underline font-medium flex items-center gap-1">
+							<h4 className="text-xs font-semibold uppercase tracking-wider text-ink-soft">Bulk Import Attendance</h4>
+							<button onClick={handleDownloadTemplate} className="text-xs text-gold hover:underline font-medium flex items-center gap-1">
 								↓ Download Template
 							</button>
 						</div>
 						<div className="flex flex-col gap-1.5">
-							<label className="text-xs font-semibold text-[#0D0F14]/60 uppercase tracking-wide">Upload filled sheet (.xlsx)</label>
+							<label className="text-xs font-semibold text-ink/60 uppercase tracking-wide">Upload filled sheet (.xlsx)</label>
 							<input
 								ref={fileInputRef}
 								type="file"
 								accept=".xlsx,.xls"
 								onChange={handleFileChange}
-								className="text-sm text-[#0D0F14] file:mr-3 file:rounded-lg file:border-0 file:bg-[#D4AF37]/10 file:px-3 file:py-1.5 file:text-xs file:font-semibold file:text-[#0D0F14] hover:file:bg-[#D4AF37]/20 file:cursor-pointer cursor-pointer"
+								className="text-sm text-ink file:mr-3 file:rounded-lg file:border-0 file:bg-gold/10 file:px-3 file:py-1.5 file:text-xs file:font-semibold file:text-ink hover:file:bg-gold/20 file:cursor-pointer cursor-pointer"
 							/>
 						</div>
 						{importRows.length > 0 && (
 							<>
-								<div className="overflow-x-auto">
-									<table className="w-full text-sm border-collapse">
+								<div className="overflow-x-auto"><table className="w-full text-sm border-collapse">
 										<thead>
-											<tr className="border-b border-[#D4AF37]/40 text-left">
-												<th className="py-1.5 pr-4 text-[#0D0F14]/50 font-medium">Student</th>
-												<th className="py-1.5 pr-4 text-[#0D0F14]/50 font-medium">student_id</th>
-												<th className="py-1.5 text-[#0D0F14]/50 font-medium">participation_score</th>
+											<tr className="border-b border-gold/40 text-left">
+												<th className="py-1.5 pr-4 text-ink/50 font-medium">Student</th>
+												<th className="py-1.5 pr-4 text-ink/50 font-medium">student_id</th>
+												<th className="py-1.5 text-ink/50 font-medium">participation_score</th>
 											</tr>
 										</thead>
 										<tbody>
 											{importRows.map((r, i) => (
-												<tr key={i} className="border-b border-[#0D0F14]/8">
-													<td className="py-2 pr-4 text-[#0D0F14]">{r._name || <span className="text-[#0D0F14]/30">—</span>}</td>
-													<td className="py-2 pr-4 text-[#0D0F14]/60 font-mono text-xs">{r.student_id}</td>
-													<td className="py-2 text-[#0D0F14]/60">{r.participation_score ?? <span className="text-[#0D0F14]/30">—</span>}</td>
+												<tr key={i} className="border-b border-ink/8">
+													<td className="py-2 pr-4 text-ink">{r._name || <span className="text-ink/30">—</span>}</td>
+													<td className="py-2 pr-4 text-ink/60 font-mono text-xs">{r.student_id}</td>
+													<td className="py-2 text-ink/60">{r.participation_score ?? <span className="text-ink/30">—</span>}</td>
 												</tr>
 											))}
 										</tbody>
-									</table>
-								</div>
+									</table></div>
 								<button onClick={handleImport} disabled={importing} className={btnCls + " self-start disabled:opacity-50"}>
 									{importing ? "Importing…" : `Import ${importRows.length} record${importRows.length !== 1 ? "s" : ""}`}
 								</button>
@@ -605,7 +603,7 @@ function SessionView({
 				<div>
 					<button
 						onClick={() => setShowAdd(v => !v)}
-						className={`rounded-lg px-4 py-1.5 text-sm font-medium transition-colors border ${showAdd ? "bg-[#D4AF37] border-[#D4AF37] text-[#0D0F14]" : "border-[#D4AF37]/70 text-[#D4AF37] hover:bg-[#D4AF37]/10"}`}
+						className={`rounded-lg px-4 py-1.5 text-sm font-medium transition-colors border ${showAdd ? "bg-gold border-gold text-ink" : "border-gold/70 text-gold hover:bg-gold/10"}`}
 					>
 						Add Attendance
 					</button>
@@ -613,7 +611,7 @@ function SessionView({
 					{showAdd && (
 						<form onSubmit={handleAdd} className="mt-3 flex gap-3 flex-wrap items-end max-w-md">
 							<div className="flex flex-col gap-1 flex-1 min-w-[160px]">
-								<label className="text-xs text-[#0D0F14]/50">Student</label>
+								<label className="text-xs text-ink/50">Student</label>
 								<select
 									className={inputCls}
 									value={addForm.student_id}
@@ -634,7 +632,7 @@ function SessionView({
 								</select>
 							</div>
 							<div className="flex flex-col gap-1 w-32">
-								<label className="text-xs text-[#0D0F14]/50">Score (optional)</label>
+								<label className="text-xs text-ink/50">Score (optional)</label>
 								<input
 									className={inputCls}
 									type="number"
@@ -649,14 +647,14 @@ function SessionView({
 				</div>
 
 				{records.length === 0 ? (
-					<p className="text-[#0D0F14]/50 text-sm">No attendance recorded for this session yet.</p>
+					<p className="text-ink/50 text-sm">No attendance recorded for this session yet.</p>
 				) : (
-					<table className="w-full text-sm border-collapse">
+					<div className="overflow-x-auto"><table className="w-full text-sm border-collapse">
 						<thead>
-							<tr className="border-b border-[#D4AF37]/40 text-left">
-								<th className="py-2 pr-4 text-[#0D0F14]/50 font-medium">Student</th>
-								<th className="py-2 pr-4 text-[#0D0F14]/50 font-medium">Participation Score</th>
-								<th className="py-2 text-[#0D0F14]/50 font-medium">Actions</th>
+							<tr className="border-b border-gold/40 text-left">
+								<th className="py-2 pr-4 text-ink/50 font-medium">Student</th>
+								<th className="py-2 pr-4 text-ink/50 font-medium">Participation Score</th>
+								<th className="py-2 text-ink/50 font-medium">Actions</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -664,8 +662,8 @@ function SessionView({
 								const student = studentMap[r.student_id];
 								const isEditing = editingId === r.id;
 								return (
-									<tr key={r.id} className="border-b border-[#0D0F14]/8">
-										<td className="py-2.5 pr-4 font-medium text-[#0D0F14]">
+									<tr key={r.id} className="border-b border-ink/8">
+										<td className="py-2.5 pr-4 font-medium text-ink">
 											{student ? `${student.fname} ${student.lname}` : `Student ${r.student_id}`}
 										</td>
 										<td className="py-2.5 pr-4">
@@ -682,10 +680,10 @@ function SessionView({
 											) : (
 												<span
 													onClick={() => { setEditingId(r.id); setEditScore(r.participation_score !== null ? String(r.participation_score) : ""); }}
-													className="cursor-pointer text-[#0D0F14] hover:text-[#D4AF37] transition-colors"
+													className="cursor-pointer text-ink hover:text-gold transition-colors"
 													title="Click to edit"
 												>
-													{r.participation_score !== null ? r.participation_score : <span className="text-[#0D0F14]/30">—</span>}
+													{r.participation_score !== null ? r.participation_score : <span className="text-ink/30">—</span>}
 												</span>
 											)}
 										</td>
@@ -698,7 +696,7 @@ function SessionView({
 								);
 							})}
 						</tbody>
-					</table>
+					</table></div>
 				)}
 			</div>
 		</div>
@@ -742,13 +740,13 @@ export default function TeacherDashboard() {
 		"";
 
 	return (
-		<div className="flex flex-col min-h-[calc(100vh-56px)] md:min-h-screen bg-[#f5f0e8]">
-			<div className="border-b border-[#d4c9b0] bg-[#ede8df] px-6 py-3 flex items-center gap-3 shrink-0">
-				<span className="text-xs font-semibold uppercase tracking-wider text-[#5b6072]">{headerLabel}</span>
+		<div className="flex flex-col min-h-[calc(100vh-56px)] md:min-h-screen bg-cream">
+			<div className="border-b border-cream-dim bg-[#ede8df] px-6 py-3 flex items-center gap-3 shrink-0">
+				<span className="text-xs font-semibold uppercase tracking-wider text-ink-soft">{headerLabel}</span>
 			</div>
 
 			{loading ? (
-				<p className="p-6 text-[#0D0F14]/50">Loading…</p>
+				<p className="p-6 text-ink/50">Loading…</p>
 			) : view === "classes" ? (
 				<ClassesView classes={classes} onSelect={goToClass} />
 			) : view === "class-detail" && selClass ? (

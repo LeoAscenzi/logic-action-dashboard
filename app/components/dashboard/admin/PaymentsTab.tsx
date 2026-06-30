@@ -62,7 +62,7 @@ const statusBadge = (s: Invoice["status"]) => {
 		unpaid:  "bg-red-100 text-red-700",
 		partial: "bg-yellow-100 text-yellow-700",
 		paid:    "bg-green-100 text-green-700",
-		void:    "bg-[#0D0F14]/10 text-[#0D0F14]/40",
+		void:    "bg-navy/10 text-ink/40",
 	};
 	return (
 		<span className={`inline-block text-[10px] font-semibold uppercase tracking-widest px-2 py-0.5 rounded ${map[s]}`}>
@@ -73,15 +73,15 @@ const statusBadge = (s: Invoice["status"]) => {
 
 const paymentStatusBadge = (s: Payment["status"]) => (
 	<span className={`inline-block text-[10px] font-semibold uppercase tracking-widest px-2 py-0.5 rounded ${
-		s === "completed" ? "bg-green-100 text-green-700" : "bg-[#0D0F14]/10 text-[#0D0F14]/40"
+		s === "completed" ? "bg-green-100 text-green-700" : "bg-navy/10 text-ink/40"
 	}`}>
 		{s}
 	</span>
 );
 
 const METHODS = ["cash", "venmo", "zelle", "check", "stripe", "other"] as const;
-const inputCls = "w-full rounded-lg border border-[#D4AF37]/60 bg-white px-3 py-2 text-sm text-[#0D0F14] focus:outline-none focus:ring-1 focus:ring-[#D4AF37]";
-const labelCls = "block text-xs font-semibold text-[#0D0F14]/60 mb-1 uppercase tracking-wider";
+const inputCls = "w-full rounded-lg border border-gold/60 bg-white px-3 py-2 text-sm text-ink focus:outline-none focus:ring-1 focus:ring-gold";
+const labelCls = "block text-xs font-semibold text-ink/60 mb-1 uppercase tracking-wider";
 
 // ── Sub-components ────────────────────────────────────────────────────────────
 
@@ -285,8 +285,8 @@ export default function PaymentsTab() {
 			onClick={() => { setView(v); setSelStudent(null); }}
 			className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-colors ${
 				view === v
-					? "bg-[#D4AF37] text-[#0D0F14]"
-					: "text-[#0D0F14]/60 hover:text-[#0D0F14] border border-[#D4AF37]/30 hover:border-[#D4AF37]"
+					? "bg-gold text-ink"
+					: "text-ink/60 hover:text-ink border border-gold/30 hover:border-gold"
 			}`}
 		>
 			{label}
@@ -296,8 +296,8 @@ export default function PaymentsTab() {
 	// ── Invoice form ──────────────────────────────────────────────────────
 
 	const InvoiceForm = () => (
-		<form onSubmit={handleSubmitInvoice} className="border border-[#D4AF37]/30 rounded-xl p-5 bg-white mb-6">
-			<h3 className="text-sm font-semibold text-[#D4AF37] mb-4">New Invoice</h3>
+		<form onSubmit={handleSubmitInvoice} className="border border-gold/30 rounded-xl p-5 bg-white mb-6">
+			<h3 className="text-sm font-semibold text-gold mb-4">New Invoice</h3>
 			<div className="grid grid-cols-2 gap-4 mb-4">
 				<div>
 					<label className={labelCls}>Student (optional)</label>
@@ -331,7 +331,7 @@ export default function PaymentsTab() {
 			<div className="mb-3">
 				<div className="flex items-center justify-between mb-2">
 					<label className={labelCls}>Line Items</label>
-					<button type="button" onClick={addLineItem} className="text-xs text-[#D4AF37] hover:underline">+ Add item</button>
+					<button type="button" onClick={addLineItem} className="text-xs text-gold hover:underline">+ Add item</button>
 				</div>
 				{invoiceForm.line_items.map((item, i) => (
 					<div key={i} className="flex flex-col sm:flex-row gap-2 mb-2">
@@ -352,14 +352,14 @@ export default function PaymentsTab() {
 						</div>
 					</div>
 				))}
-				<div className="text-right text-sm font-semibold text-[#D4AF37] mt-1">
+				<div className="text-right text-sm font-semibold text-gold mt-1">
 					Total: {fmt(invoiceTotal)}
 				</div>
 			</div>
 
 			<div className="flex gap-2 justify-end">
-				<button type="button" onClick={() => setShowInvoiceForm(false)} className="px-4 py-2 text-sm text-[#0D0F14]/50 hover:text-[#0D0F14]">Cancel</button>
-				<button type="submit" disabled={submitting} className="px-5 py-2 rounded-lg bg-[#D4AF37] text-[#0D0F14] text-sm font-semibold hover:bg-[#c9a84c] disabled:opacity-50 transition-colors">
+				<button type="button" onClick={() => setShowInvoiceForm(false)} className="px-4 py-2 text-sm text-ink/50 hover:text-ink">Cancel</button>
+				<button type="submit" disabled={submitting} className="px-5 py-2 rounded-lg bg-gold text-ink text-sm font-semibold hover:bg-gold disabled:opacity-50 transition-colors">
 					{submitting ? "Creating…" : "Create Invoice"}
 				</button>
 			</div>
@@ -373,8 +373,8 @@ export default function PaymentsTab() {
 		: invoices.filter(i => i.status === "unpaid" || i.status === "partial");
 
 	const PaymentForm = () => (
-		<form onSubmit={handleSubmitPayment} className="border border-[#D4AF37]/30 rounded-xl p-5 bg-white mb-6">
-			<h3 className="text-sm font-semibold text-[#D4AF37] mb-4">Record Payment</h3>
+		<form onSubmit={handleSubmitPayment} className="border border-gold/30 rounded-xl p-5 bg-white mb-6">
+			<h3 className="text-sm font-semibold text-gold mb-4">Record Payment</h3>
 			<div className="grid grid-cols-2 gap-4 mb-4">
 				<div>
 					<label className={labelCls}>Student (optional)</label>
@@ -449,8 +449,8 @@ export default function PaymentsTab() {
 				/>
 			</div>
 			<div className="flex gap-2 justify-end">
-				<button type="button" onClick={() => setShowPaymentForm(false)} className="px-4 py-2 text-sm text-[#0D0F14]/50 hover:text-[#0D0F14]">Cancel</button>
-				<button type="submit" disabled={submitting} className="px-5 py-2 rounded-lg bg-[#D4AF37] text-[#0D0F14] text-sm font-semibold hover:bg-[#c9a84c] disabled:opacity-50 transition-colors">
+				<button type="button" onClick={() => setShowPaymentForm(false)} className="px-4 py-2 text-sm text-ink/50 hover:text-ink">Cancel</button>
+				<button type="submit" disabled={submitting} className="px-5 py-2 rounded-lg bg-gold text-ink text-sm font-semibold hover:bg-gold disabled:opacity-50 transition-colors">
 					{submitting ? "Recording…" : "Record Payment"}
 				</button>
 			</div>
@@ -464,27 +464,27 @@ export default function PaymentsTab() {
 			<div className="p-8 max-w-4xl">
 				{toast && <Toast msg={toast.msg} ok={toast.ok} />}
 
-				<button onClick={() => setSelStudent(null)} className="text-sm text-[#0D0F14]/50 hover:text-[#D4AF37] mb-6 transition-colors">
+				<button onClick={() => setSelStudent(null)} className="text-sm text-ink/50 hover:text-gold mb-6 transition-colors">
 					← Back to Balances
 				</button>
 
 				<div className="flex items-start justify-between mb-6">
 					<div>
-						<h2 className="text-xl font-semibold text-[#D4AF37]">{selStudent.fname} {selStudent.lname}</h2>
-						<p className="text-sm text-[#0D0F14]/50 mt-1">
+						<h2 className="text-xl font-semibold text-gold">{selStudent.fname} {selStudent.lname}</h2>
+						<p className="text-sm text-ink/50 mt-1">
 							Invoiced: {fmt(selStudent.total_invoiced)} · Paid: {fmt(selStudent.total_paid)} · Balance: <span className={selStudent.balance > 0 ? "text-red-600 font-semibold" : "text-green-600 font-semibold"}>{fmt(selStudent.balance)}</span>
 						</p>
 					</div>
 					<div className="flex gap-2">
 						<button
 							onClick={() => { setShowPaymentForm(p => !p); setShowInvoiceForm(false); setPaymentForm({ ...emptyPayment, student_id: String(selStudent.student_id) }); }}
-							className="px-3 py-1.5 rounded-lg border border-[#D4AF37]/50 text-sm text-[#D4AF37] hover:bg-[#D4AF37] hover:text-[#0D0F14] transition-colors"
+							className="px-3 py-1.5 rounded-lg border border-gold/50 text-sm text-gold hover:bg-gold hover:text-ink transition-colors"
 						>
 							+ Record Payment
 						</button>
 						<button
 							onClick={() => { setShowInvoiceForm(p => !p); setShowPaymentForm(false); setInvoiceForm({ ...emptyInvoice, student_id: String(selStudent.student_id) }); }}
-							className="px-3 py-1.5 rounded-lg bg-[#D4AF37] text-[#0D0F14] text-sm font-semibold hover:bg-[#c9a84c] transition-colors"
+							className="px-3 py-1.5 rounded-lg bg-gold text-ink text-sm font-semibold hover:bg-gold transition-colors"
 						>
 							+ New Invoice
 						</button>
@@ -495,40 +495,40 @@ export default function PaymentsTab() {
 				{showPaymentForm && PaymentForm()}
 
 				{stuLoading ? (
-					<p className="text-[#0D0F14]/40 text-sm">Loading…</p>
+					<p className="text-ink/40 text-sm">Loading…</p>
 				) : (
 					<>
 						{/* Invoices */}
 						<section className="mb-8">
-							<h3 className="text-sm font-semibold uppercase tracking-widest text-[#0D0F14]/50 mb-3">Invoices</h3>
+							<h3 className="text-sm font-semibold uppercase tracking-widest text-ink/50 mb-3">Invoices</h3>
 							{stuInvoices.length === 0 ? (
-								<p className="text-sm text-[#0D0F14]/40">No invoices yet.</p>
+								<p className="text-sm text-ink/40">No invoices yet.</p>
 							) : (
-								<div className="border border-[#D4AF37]/20 rounded-xl overflow-hidden">
+								<div className="border border-gold/20 rounded-xl overflow-x-auto">
 									<table className="w-full text-sm">
 										<thead>
-											<tr className="border-b border-[#D4AF37]/20 bg-[#D4AF37]/5">
-												<th className="py-2 px-4 text-left text-xs font-semibold text-[#0D0F14]/50">#</th>
-												<th className="py-2 px-4 text-left text-xs font-semibold text-[#0D0F14]/50">Status</th>
-												<th className="py-2 px-4 text-left text-xs font-semibold text-[#0D0F14]/50">Total</th>
-												<th className="py-2 px-4 text-left text-xs font-semibold text-[#0D0F14]/50">Paid</th>
-												<th className="py-2 px-4 text-left text-xs font-semibold text-[#0D0F14]/50">Due</th>
-												<th className="py-2 px-4 text-left text-xs font-semibold text-[#0D0F14]/50">Memo</th>
+											<tr className="border-b border-gold/20 bg-gold/5">
+												<th className="py-2 px-4 text-left text-xs font-semibold text-ink/50">#</th>
+												<th className="py-2 px-4 text-left text-xs font-semibold text-ink/50">Status</th>
+												<th className="py-2 px-4 text-left text-xs font-semibold text-ink/50">Total</th>
+												<th className="py-2 px-4 text-left text-xs font-semibold text-ink/50">Paid</th>
+												<th className="py-2 px-4 text-left text-xs font-semibold text-ink/50">Due</th>
+												<th className="py-2 px-4 text-left text-xs font-semibold text-ink/50">Memo</th>
 												<th className="py-2 px-4" />
 											</tr>
 										</thead>
 										<tbody>
 											{stuInvoices.map(inv => (
-												<tr key={inv.id} className="border-b border-[#D4AF37]/10 last:border-0 hover:bg-[#D4AF37]/5 transition-colors">
-													<td className="py-2.5 px-4 text-[#0D0F14]/50">{inv.id}</td>
+												<tr key={inv.id} className="border-b border-gold/10 last:border-0 hover:bg-gold/5 transition-colors">
+													<td className="py-2.5 px-4 text-ink/50">{inv.id}</td>
 													<td className="py-2.5 px-4">{statusBadge(inv.status)}</td>
-													<td className="py-2.5 px-4 font-medium text-[#0D0F14]">{fmt(inv.total)}</td>
-													<td className="py-2.5 px-4 text-[#0D0F14]/70">{fmt(inv.amount_paid)}</td>
-													<td className="py-2.5 px-4 text-[#0D0F14]/60">{inv.due_date}</td>
-													<td className="py-2.5 px-4 text-[#0D0F14]/50 max-w-xs truncate">{inv.memo || "—"}</td>
+													<td className="py-2.5 px-4 font-medium text-ink">{fmt(inv.total)}</td>
+													<td className="py-2.5 px-4 text-ink/70">{fmt(inv.amount_paid)}</td>
+													<td className="py-2.5 px-4 text-ink/60">{inv.due_date}</td>
+													<td className="py-2.5 px-4 text-ink/50 max-w-xs truncate">{inv.memo || "—"}</td>
 													<td className="py-2.5 px-4 text-right">
 														{inv.status !== "void" && (
-															<button onClick={() => handleVoidInvoice(inv.id)} className="text-xs text-[#0D0F14]/30 hover:text-red-500 transition-colors">
+															<button onClick={() => handleVoidInvoice(inv.id)} className="text-xs text-ink/30 hover:text-red-500 transition-colors">
 																Void
 															</button>
 														)}
@@ -543,37 +543,37 @@ export default function PaymentsTab() {
 
 						{/* Payments */}
 						<section>
-							<h3 className="text-sm font-semibold uppercase tracking-widest text-[#0D0F14]/50 mb-3">Payments</h3>
+							<h3 className="text-sm font-semibold uppercase tracking-widest text-ink/50 mb-3">Payments</h3>
 							{stuPayments.length === 0 ? (
-								<p className="text-sm text-[#0D0F14]/40">No payments yet.</p>
+								<p className="text-sm text-ink/40">No payments yet.</p>
 							) : (
-								<div className="border border-[#D4AF37]/20 rounded-xl overflow-hidden">
+								<div className="border border-gold/20 rounded-xl overflow-x-auto">
 									<table className="w-full text-sm">
 										<thead>
-											<tr className="border-b border-[#D4AF37]/20 bg-[#D4AF37]/5">
-												<th className="py-2 px-4 text-left text-xs font-semibold text-[#0D0F14]/50">#</th>
-												<th className="py-2 px-4 text-left text-xs font-semibold text-[#0D0F14]/50">Status</th>
-												<th className="py-2 px-4 text-left text-xs font-semibold text-[#0D0F14]/50">Amount</th>
-												<th className="py-2 px-4 text-left text-xs font-semibold text-[#0D0F14]/50">Method</th>
-												<th className="py-2 px-4 text-left text-xs font-semibold text-[#0D0F14]/50">Date</th>
-												<th className="py-2 px-4 text-left text-xs font-semibold text-[#0D0F14]/50">Memo</th>
-												<th className="py-2 px-4 text-left text-xs font-semibold text-[#0D0F14]/50">Invoice</th>
+											<tr className="border-b border-gold/20 bg-gold/5">
+												<th className="py-2 px-4 text-left text-xs font-semibold text-ink/50">#</th>
+												<th className="py-2 px-4 text-left text-xs font-semibold text-ink/50">Status</th>
+												<th className="py-2 px-4 text-left text-xs font-semibold text-ink/50">Amount</th>
+												<th className="py-2 px-4 text-left text-xs font-semibold text-ink/50">Method</th>
+												<th className="py-2 px-4 text-left text-xs font-semibold text-ink/50">Date</th>
+												<th className="py-2 px-4 text-left text-xs font-semibold text-ink/50">Memo</th>
+												<th className="py-2 px-4 text-left text-xs font-semibold text-ink/50">Invoice</th>
 												<th className="py-2 px-4" />
 											</tr>
 										</thead>
 										<tbody>
 											{stuPayments.map(pay => (
-												<tr key={pay.id} className="border-b border-[#D4AF37]/10 last:border-0 hover:bg-[#D4AF37]/5 transition-colors">
-													<td className="py-2.5 px-4 text-[#0D0F14]/50">{pay.id}</td>
+												<tr key={pay.id} className="border-b border-gold/10 last:border-0 hover:bg-gold/5 transition-colors">
+													<td className="py-2.5 px-4 text-ink/50">{pay.id}</td>
 													<td className="py-2.5 px-4">{paymentStatusBadge(pay.status)}</td>
-													<td className="py-2.5 px-4 font-medium text-[#0D0F14]">{fmt(pay.amount)}</td>
-													<td className="py-2.5 px-4 capitalize text-[#0D0F14]/70">{pay.method}</td>
-													<td className="py-2.5 px-4 text-[#0D0F14]/60">{pay.received_at}</td>
-													<td className="py-2.5 px-4 text-[#0D0F14]/50 max-w-xs truncate">{pay.memo || "—"}</td>
-													<td className="py-2.5 px-4 text-[#0D0F14]/50">{pay.invoice_id ? `#${pay.invoice_id}` : "—"}</td>
+													<td className="py-2.5 px-4 font-medium text-ink">{fmt(pay.amount)}</td>
+													<td className="py-2.5 px-4 capitalize text-ink/70">{pay.method}</td>
+													<td className="py-2.5 px-4 text-ink/60">{pay.received_at}</td>
+													<td className="py-2.5 px-4 text-ink/50 max-w-xs truncate">{pay.memo || "—"}</td>
+													<td className="py-2.5 px-4 text-ink/50">{pay.invoice_id ? `#${pay.invoice_id}` : "—"}</td>
 													<td className="py-2.5 px-4 text-right">
 														{pay.status === "completed" && (
-															<button onClick={() => handleRefundPayment(pay.id)} className="text-xs text-[#0D0F14]/30 hover:text-red-500 transition-colors">
+															<button onClick={() => handleRefundPayment(pay.id)} className="text-xs text-ink/30 hover:text-red-500 transition-colors">
 																Refund
 															</button>
 														)}
@@ -598,7 +598,7 @@ export default function PaymentsTab() {
 			{toast && <Toast msg={toast.msg} ok={toast.ok} />}
 
 			<div className="flex items-center justify-between mb-6">
-				<h1 className="text-2xl font-semibold text-[#D4AF37]">Payments</h1>
+				<h1 className="text-2xl font-semibold text-gold">Payments</h1>
 				<div className="flex gap-2">
 					{viewBtn("balances", "Balances")}
 					{viewBtn("invoices", "All Invoices")}
@@ -611,13 +611,13 @@ export default function PaymentsTab() {
 					<div className="flex justify-end gap-2 mb-4">
 						<button
 							onClick={() => { setShowPaymentForm(p => !p); setShowInvoiceForm(false); setPaymentForm(emptyPayment); }}
-							className="px-3 py-1.5 rounded-lg border border-[#D4AF37]/50 text-sm text-[#D4AF37] hover:bg-[#D4AF37] hover:text-[#0D0F14] transition-colors"
+							className="px-3 py-1.5 rounded-lg border border-gold/50 text-sm text-gold hover:bg-gold hover:text-ink transition-colors"
 						>
 							+ Record Payment
 						</button>
 						<button
 							onClick={() => { setShowInvoiceForm(p => !p); setShowPaymentForm(false); setInvoiceForm(emptyInvoice); }}
-							className="px-3 py-1.5 rounded-lg bg-[#D4AF37] text-[#0D0F14] text-sm font-semibold hover:bg-[#c9a84c] transition-colors"
+							className="px-3 py-1.5 rounded-lg bg-gold text-ink text-sm font-semibold hover:bg-gold transition-colors"
 						>
 							+ New Invoice
 						</button>
@@ -627,18 +627,18 @@ export default function PaymentsTab() {
 					{showPaymentForm && PaymentForm()}
 
 					{loading ? (
-						<p className="text-[#0D0F14]/40 text-sm">Loading…</p>
+						<p className="text-ink/40 text-sm">Loading…</p>
 					) : balances.length === 0 ? (
-						<p className="text-[#0D0F14]/40 text-sm py-12 text-center">No students yet.</p>
+						<p className="text-ink/40 text-sm py-12 text-center">No students yet.</p>
 					) : (
-						<div className="border border-[#D4AF37]/20 rounded-xl overflow-hidden">
+						<div className="border border-gold/20 rounded-xl overflow-x-auto">
 							<table className="w-full text-sm">
 								<thead>
-									<tr className="border-b border-[#D4AF37]/20 bg-[#D4AF37]/5">
-										<th className="py-2.5 px-4 text-left text-xs font-semibold text-[#0D0F14]/50">Student</th>
-										<th className="py-2.5 px-4 text-right text-xs font-semibold text-[#0D0F14]/50">Invoiced</th>
-										<th className="py-2.5 px-4 text-right text-xs font-semibold text-[#0D0F14]/50">Paid</th>
-										<th className="py-2.5 px-4 text-right text-xs font-semibold text-[#0D0F14]/50">Balance</th>
+									<tr className="border-b border-gold/20 bg-gold/5">
+										<th className="py-2.5 px-4 text-left text-xs font-semibold text-ink/50">Student</th>
+										<th className="py-2.5 px-4 text-right text-xs font-semibold text-ink/50">Invoiced</th>
+										<th className="py-2.5 px-4 text-right text-xs font-semibold text-ink/50">Paid</th>
+										<th className="py-2.5 px-4 text-right text-xs font-semibold text-ink/50">Balance</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -646,13 +646,13 @@ export default function PaymentsTab() {
 										<tr
 											key={b.student_id}
 											onClick={() => openStudent(b)}
-											className="border-b border-[#D4AF37]/10 last:border-0 hover:bg-[#D4AF37]/5 cursor-pointer transition-colors"
+											className="border-b border-gold/10 last:border-0 hover:bg-gold/5 cursor-pointer transition-colors"
 										>
-											<td className="py-2.5 px-4 font-medium text-[#D4AF37] hover:underline">
+											<td className="py-2.5 px-4 font-medium text-gold hover:underline">
 												{b.fname} {b.lname}
 											</td>
-											<td className="py-2.5 px-4 text-right text-[#0D0F14]/70">{fmt(b.total_invoiced)}</td>
-											<td className="py-2.5 px-4 text-right text-[#0D0F14]/70">{fmt(b.total_paid)}</td>
+											<td className="py-2.5 px-4 text-right text-ink/70">{fmt(b.total_invoiced)}</td>
+											<td className="py-2.5 px-4 text-right text-ink/70">{fmt(b.total_paid)}</td>
 											<td className={`py-2.5 px-4 text-right font-semibold ${b.balance > 0 ? "text-red-600" : "text-green-600"}`}>
 												{fmt(b.balance)}
 											</td>
@@ -670,28 +670,28 @@ export default function PaymentsTab() {
 					<div className="flex justify-end mb-4">
 						<button
 							onClick={() => { setShowInvoiceForm(p => !p); setInvoiceForm(emptyInvoice); }}
-							className="px-3 py-1.5 rounded-lg bg-[#D4AF37] text-[#0D0F14] text-sm font-semibold hover:bg-[#c9a84c] transition-colors"
+							className="px-3 py-1.5 rounded-lg bg-gold text-ink text-sm font-semibold hover:bg-gold transition-colors"
 						>
 							+ New Invoice
 						</button>
 					</div>
 					{showInvoiceForm && InvoiceForm()}
 					{loading ? (
-						<p className="text-[#0D0F14]/40 text-sm">Loading…</p>
+						<p className="text-ink/40 text-sm">Loading…</p>
 					) : invoices.length === 0 ? (
-						<p className="text-[#0D0F14]/40 text-sm py-12 text-center">No invoices yet.</p>
+						<p className="text-ink/40 text-sm py-12 text-center">No invoices yet.</p>
 					) : (
-						<div className="border border-[#D4AF37]/20 rounded-xl overflow-hidden">
+						<div className="border border-gold/20 rounded-xl overflow-x-auto">
 							<table className="w-full text-sm">
 								<thead>
-									<tr className="border-b border-[#D4AF37]/20 bg-[#D4AF37]/5">
-										<th className="py-2 px-4 text-left text-xs font-semibold text-[#0D0F14]/50">#</th>
-										<th className="py-2 px-4 text-left text-xs font-semibold text-[#0D0F14]/50">Student</th>
-										<th className="py-2 px-4 text-left text-xs font-semibold text-[#0D0F14]/50">Status</th>
-										<th className="py-2 px-4 text-right text-xs font-semibold text-[#0D0F14]/50">Total</th>
-										<th className="py-2 px-4 text-right text-xs font-semibold text-[#0D0F14]/50">Paid</th>
-										<th className="py-2 px-4 text-left text-xs font-semibold text-[#0D0F14]/50">Due</th>
-										<th className="py-2 px-4 text-left text-xs font-semibold text-[#0D0F14]/50">Memo</th>
+									<tr className="border-b border-gold/20 bg-gold/5">
+										<th className="py-2 px-4 text-left text-xs font-semibold text-ink/50">#</th>
+										<th className="py-2 px-4 text-left text-xs font-semibold text-ink/50">Student</th>
+										<th className="py-2 px-4 text-left text-xs font-semibold text-ink/50">Status</th>
+										<th className="py-2 px-4 text-right text-xs font-semibold text-ink/50">Total</th>
+										<th className="py-2 px-4 text-right text-xs font-semibold text-ink/50">Paid</th>
+										<th className="py-2 px-4 text-left text-xs font-semibold text-ink/50">Due</th>
+										<th className="py-2 px-4 text-left text-xs font-semibold text-ink/50">Memo</th>
 										<th className="py-2 px-4" />
 									</tr>
 								</thead>
@@ -699,17 +699,17 @@ export default function PaymentsTab() {
 									{invoices.map(inv => {
 										const stu = students.find(s => s.id === inv.student_id);
 										return (
-											<tr key={inv.id} className="border-b border-[#D4AF37]/10 last:border-0 hover:bg-[#D4AF37]/5 transition-colors">
-												<td className="py-2.5 px-4 text-[#0D0F14]/50">{inv.id}</td>
-												<td className="py-2.5 px-4 text-[#0D0F14]/70">{stu ? `${stu.fname} ${stu.lname}` : "—"}</td>
+											<tr key={inv.id} className="border-b border-gold/10 last:border-0 hover:bg-gold/5 transition-colors">
+												<td className="py-2.5 px-4 text-ink/50">{inv.id}</td>
+												<td className="py-2.5 px-4 text-ink/70">{stu ? `${stu.fname} ${stu.lname}` : "—"}</td>
 												<td className="py-2.5 px-4">{statusBadge(inv.status)}</td>
-												<td className="py-2.5 px-4 text-right font-medium text-[#0D0F14]">{fmt(inv.total)}</td>
-												<td className="py-2.5 px-4 text-right text-[#0D0F14]/70">{fmt(inv.amount_paid)}</td>
-												<td className="py-2.5 px-4 text-[#0D0F14]/60">{inv.due_date}</td>
-												<td className="py-2.5 px-4 text-[#0D0F14]/50 max-w-xs truncate">{inv.memo || "—"}</td>
+												<td className="py-2.5 px-4 text-right font-medium text-ink">{fmt(inv.total)}</td>
+												<td className="py-2.5 px-4 text-right text-ink/70">{fmt(inv.amount_paid)}</td>
+												<td className="py-2.5 px-4 text-ink/60">{inv.due_date}</td>
+												<td className="py-2.5 px-4 text-ink/50 max-w-xs truncate">{inv.memo || "—"}</td>
 												<td className="py-2.5 px-4 text-right">
 													{inv.status !== "void" && (
-														<button onClick={() => handleVoidInvoice(inv.id)} className="text-xs text-[#0D0F14]/30 hover:text-red-500 transition-colors">
+														<button onClick={() => handleVoidInvoice(inv.id)} className="text-xs text-ink/30 hover:text-red-500 transition-colors">
 															Void
 														</button>
 													)}
@@ -729,29 +729,29 @@ export default function PaymentsTab() {
 					<div className="flex justify-end mb-4">
 						<button
 							onClick={() => { setShowPaymentForm(p => !p); setPaymentForm(emptyPayment); }}
-							className="px-3 py-1.5 rounded-lg bg-[#D4AF37] text-[#0D0F14] text-sm font-semibold hover:bg-[#c9a84c] transition-colors"
+							className="px-3 py-1.5 rounded-lg bg-gold text-ink text-sm font-semibold hover:bg-gold transition-colors"
 						>
 							+ Record Payment
 						</button>
 					</div>
 					{showPaymentForm && PaymentForm()}
 					{loading ? (
-						<p className="text-[#0D0F14]/40 text-sm">Loading…</p>
+						<p className="text-ink/40 text-sm">Loading…</p>
 					) : payments.length === 0 ? (
-						<p className="text-[#0D0F14]/40 text-sm py-12 text-center">No payments yet.</p>
+						<p className="text-ink/40 text-sm py-12 text-center">No payments yet.</p>
 					) : (
-						<div className="border border-[#D4AF37]/20 rounded-xl overflow-hidden">
+						<div className="border border-gold/20 rounded-xl overflow-x-auto">
 							<table className="w-full text-sm">
 								<thead>
-									<tr className="border-b border-[#D4AF37]/20 bg-[#D4AF37]/5">
-										<th className="py-2 px-4 text-left text-xs font-semibold text-[#0D0F14]/50">#</th>
-										<th className="py-2 px-4 text-left text-xs font-semibold text-[#0D0F14]/50">Student</th>
-										<th className="py-2 px-4 text-left text-xs font-semibold text-[#0D0F14]/50">Status</th>
-										<th className="py-2 px-4 text-right text-xs font-semibold text-[#0D0F14]/50">Amount</th>
-										<th className="py-2 px-4 text-left text-xs font-semibold text-[#0D0F14]/50">Method</th>
-										<th className="py-2 px-4 text-left text-xs font-semibold text-[#0D0F14]/50">Date</th>
-										<th className="py-2 px-4 text-left text-xs font-semibold text-[#0D0F14]/50">Invoice</th>
-										<th className="py-2 px-4 text-left text-xs font-semibold text-[#0D0F14]/50">Memo</th>
+									<tr className="border-b border-gold/20 bg-gold/5">
+										<th className="py-2 px-4 text-left text-xs font-semibold text-ink/50">#</th>
+										<th className="py-2 px-4 text-left text-xs font-semibold text-ink/50">Student</th>
+										<th className="py-2 px-4 text-left text-xs font-semibold text-ink/50">Status</th>
+										<th className="py-2 px-4 text-right text-xs font-semibold text-ink/50">Amount</th>
+										<th className="py-2 px-4 text-left text-xs font-semibold text-ink/50">Method</th>
+										<th className="py-2 px-4 text-left text-xs font-semibold text-ink/50">Date</th>
+										<th className="py-2 px-4 text-left text-xs font-semibold text-ink/50">Invoice</th>
+										<th className="py-2 px-4 text-left text-xs font-semibold text-ink/50">Memo</th>
 										<th className="py-2 px-4" />
 									</tr>
 								</thead>
@@ -759,18 +759,18 @@ export default function PaymentsTab() {
 									{payments.map(pay => {
 										const stu = students.find(s => s.id === pay.student_id);
 										return (
-											<tr key={pay.id} className="border-b border-[#D4AF37]/10 last:border-0 hover:bg-[#D4AF37]/5 transition-colors">
-												<td className="py-2.5 px-4 text-[#0D0F14]/50">{pay.id}</td>
-												<td className="py-2.5 px-4 text-[#0D0F14]/70">{stu ? `${stu.fname} ${stu.lname}` : "—"}</td>
+											<tr key={pay.id} className="border-b border-gold/10 last:border-0 hover:bg-gold/5 transition-colors">
+												<td className="py-2.5 px-4 text-ink/50">{pay.id}</td>
+												<td className="py-2.5 px-4 text-ink/70">{stu ? `${stu.fname} ${stu.lname}` : "—"}</td>
 												<td className="py-2.5 px-4">{paymentStatusBadge(pay.status)}</td>
-												<td className="py-2.5 px-4 text-right font-medium text-[#0D0F14]">{fmt(pay.amount)}</td>
-												<td className="py-2.5 px-4 capitalize text-[#0D0F14]/70">{pay.method}</td>
-												<td className="py-2.5 px-4 text-[#0D0F14]/60">{pay.received_at}</td>
-												<td className="py-2.5 px-4 text-[#0D0F14]/50">{pay.invoice_id ? `#${pay.invoice_id}` : "—"}</td>
-												<td className="py-2.5 px-4 text-[#0D0F14]/50 max-w-xs truncate">{pay.memo || "—"}</td>
+												<td className="py-2.5 px-4 text-right font-medium text-ink">{fmt(pay.amount)}</td>
+												<td className="py-2.5 px-4 capitalize text-ink/70">{pay.method}</td>
+												<td className="py-2.5 px-4 text-ink/60">{pay.received_at}</td>
+												<td className="py-2.5 px-4 text-ink/50">{pay.invoice_id ? `#${pay.invoice_id}` : "—"}</td>
+												<td className="py-2.5 px-4 text-ink/50 max-w-xs truncate">{pay.memo || "—"}</td>
 												<td className="py-2.5 px-4 text-right">
 													{pay.status === "completed" && (
-														<button onClick={() => handleRefundPayment(pay.id)} className="text-xs text-[#0D0F14]/30 hover:text-red-500 transition-colors">
+														<button onClick={() => handleRefundPayment(pay.id)} className="text-xs text-ink/30 hover:text-red-500 transition-colors">
 															Refund
 														</button>
 													)}

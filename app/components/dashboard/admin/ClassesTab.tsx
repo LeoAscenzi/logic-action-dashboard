@@ -11,19 +11,19 @@ interface Student  { id: number; fname: string; lname: string; parent_id: number
 interface Session  { id: number; class_id: number; class_date: string; class_duration: number; }
 interface Attendance { id: number; class_session_id: number; student_id: number; participation_score: number | null; }
 
-const inputCls = "rounded-lg border border-[#D4AF37]/60 bg-white/70 px-3 py-2 text-sm text-[#0D0F14] placeholder:text-[#0D0F14]/40 focus:outline-none focus:ring-1 focus:ring-[#D4AF37]";
-const btnCls   = "rounded-lg bg-[#D4AF37] px-4 py-2 text-sm font-semibold text-[#0D0F14] hover:bg-[#c4a230] transition-colors";
-const ghostBtn = "rounded-lg px-4 py-1.5 text-sm font-medium transition-colors border border-[#D4AF37]/70 text-[#D4AF37] hover:bg-[#D4AF37]/10";
+const inputCls = "rounded-lg border border-gold/60 bg-white/70 px-3 py-2 text-sm text-ink placeholder:text-ink/40 focus:outline-none focus:ring-1 focus:ring-gold";
+const btnCls   = "rounded-lg bg-gold px-4 py-2 text-sm font-semibold text-ink hover:bg-gold-light transition-colors";
+const ghostBtn = "rounded-lg px-4 py-1.5 text-sm font-medium transition-colors border border-gold/70 text-gold hover:bg-gold/10";
 
 function Breadcrumb({ parts }: { parts: { label: string; onClick?: () => void }[] }) {
 	return (
-		<nav className="flex items-center gap-1.5 text-sm text-[#0D0F14]/50 mb-4">
+		<nav className="flex items-center gap-1.5 text-sm text-ink/50 mb-4">
 			{parts.map((p, i) => (
 				<span key={i} className="flex items-center gap-1.5">
 					{i > 0 && <span>/</span>}
 					{p.onClick
-						? <button onClick={p.onClick} className="hover:text-[#D4AF37] transition-colors">{p.label}</button>
-						: <span className="text-[#0D0F14] font-medium">{p.label}</span>
+						? <button onClick={p.onClick} className="hover:text-gold transition-colors">{p.label}</button>
+						: <span className="text-ink font-medium">{p.label}</span>
 					}
 				</span>
 			))}
@@ -146,18 +146,18 @@ function ClassListView({ onViewClass }: { onViewClass: (id: number, name: string
 		} catch (err) { toast(err instanceof ApiError ? JSON.stringify(err.data) : "Error", false); }
 	};
 
-	if (loading) return <p className="p-6 text-[#0D0F14]/50">Loading…</p>;
+	if (loading) return <p className="p-6 text-ink/50">Loading…</p>;
 
 	return (
 		<div className="flex flex-col min-h-[calc(100vh-56px)] md:min-h-screen">
-			<div className="border-b border-[#d4c9b0] bg-[#ede8df] px-6 py-3 flex items-center gap-3 flex-wrap shrink-0">
-				<span className="text-xs font-semibold uppercase tracking-wider text-[#5b6072] mr-1">Classes</span>
+			<div className="border-b border-cream-dim bg-[#ede8df] px-6 py-3 flex items-center gap-3 flex-wrap shrink-0">
+				<span className="text-xs font-semibold uppercase tracking-wider text-ink-soft mr-1">Classes</span>
 				{(["create-class", "add-session"] as const).map(key => (
-					<button key={key} onClick={() => toggle(key)} className={`rounded-lg px-4 py-1.5 text-sm font-medium transition-colors border ${action === key ? "bg-[#D4AF37] border-[#D4AF37] text-[#0D0F14]" : "border-[#D4AF37]/70 text-[#D4AF37] hover:bg-[#D4AF37]/10"}`}>
+					<button key={key} onClick={() => toggle(key)} className={`rounded-lg px-4 py-1.5 text-sm font-medium transition-colors border ${action === key ? "bg-gold border-gold text-ink" : "border-gold/70 text-gold hover:bg-gold/10"}`}>
 						{key === "create-class" ? "Create Class" : "Add Session"}
 					</button>
 				))}
-				<button onClick={() => toggle("edit-class")} disabled={selected.size !== 1} className={`rounded-lg px-4 py-1.5 text-sm font-medium transition-colors border ${action === "edit-class" ? "bg-[#D4AF37] border-[#D4AF37] text-[#0D0F14]" : selected.size === 1 ? "border-[#D4AF37]/70 text-[#D4AF37] hover:bg-[#D4AF37]/10" : "border-[#0D0F14]/20 text-[#0D0F14]/30 cursor-not-allowed"}`}>Edit Class</button>
+				<button onClick={() => toggle("edit-class")} disabled={selected.size !== 1} className={`rounded-lg px-4 py-1.5 text-sm font-medium transition-colors border ${action === "edit-class" ? "bg-gold border-gold text-ink" : selected.size === 1 ? "border-gold/70 text-gold hover:bg-gold/10" : "border-ink/20 text-ink/30 cursor-not-allowed"}`}>Edit Class</button>
 				<div className="flex-1" />
 				{selected.size > 0 && (
 					<button onClick={handleDeleteSelected} className="rounded-lg px-4 py-1.5 text-sm font-medium transition-colors border border-red-400/70 text-red-600 hover:bg-red-50">Delete ({selected.size})</button>
@@ -168,7 +168,7 @@ function ClassListView({ onViewClass }: { onViewClass: (id: number, name: string
 				{msg && <p className={`text-sm font-medium ${msg.ok ? "text-green-700" : "text-red-600"}`}>{msg.text}</p>}
 
 				{action === "create-class" && (
-					<div className="bg-white rounded-xl border border-[#D4AF37]/30 p-5 max-w-md">
+					<div className="bg-white rounded-xl border border-gold/30 p-5 max-w-md">
 						<form onSubmit={handleCreateClass} className="flex flex-col gap-3">
 							<input className={inputCls} placeholder="Class name" value={classForm.class_name} onChange={e => setClassForm(f => ({ ...f, class_name: e.target.value }))} required />
 							<input className={inputCls} type="number" placeholder="Total sessions" value={classForm.total_sessions} onChange={e => setClassForm(f => ({ ...f, total_sessions: e.target.value }))} required />
@@ -183,7 +183,7 @@ function ClassListView({ onViewClass }: { onViewClass: (id: number, name: string
 				)}
 
 				{action === "add-session" && (
-					<div className="bg-white rounded-xl border border-[#D4AF37]/30 p-5 max-w-md">
+					<div className="bg-white rounded-xl border border-gold/30 p-5 max-w-md">
 						<form onSubmit={handleCreateSession} className="flex flex-col gap-3">
 							<select className={inputCls} value={sessionForm.class_id} onChange={e => setSessionForm(f => ({ ...f, class_id: e.target.value }))} required>
 								<option value="">Select class</option>
@@ -197,7 +197,7 @@ function ClassListView({ onViewClass }: { onViewClass: (id: number, name: string
 				)}
 
 				{action === "edit-class" && selected.size === 1 && (
-					<div className="bg-white rounded-xl border border-[#D4AF37]/30 p-5 max-w-md">
+					<div className="bg-white rounded-xl border border-gold/30 p-5 max-w-md">
 						<form onSubmit={handleEditClass} className="flex flex-col gap-3">
 							<input className={inputCls} placeholder="Class name" value={editForm.class_name} onChange={e => setEditForm(f => ({ ...f, class_name: e.target.value }))} required />
 							<input className={inputCls} type="number" placeholder="Total sessions" value={editForm.total_sessions} onChange={e => setEditForm(f => ({ ...f, total_sessions: e.target.value }))} required />
@@ -216,24 +216,24 @@ function ClassListView({ onViewClass }: { onViewClass: (id: number, name: string
 				)}
 
 				<div>
-					<h3 className="font-semibold text-[#D4AF37] tracking-wide text-sm uppercase mb-4">All Classes</h3>
+					<h3 className="font-semibold text-gold tracking-wide text-sm uppercase mb-4">All Classes</h3>
 					{classes.length === 0 ? (
-						<p className="text-[#0D0F14]/50 text-sm">No classes yet.</p>
+						<p className="text-ink/50 text-sm">No classes yet.</p>
 					) : (
-						<table className="w-full text-sm border-collapse">
+						<div className="overflow-x-auto"><table className="w-full text-sm border-collapse">
 							<thead>
-								<tr className="border-b border-[#D4AF37]/40 text-left">
+								<tr className="border-b border-gold/40 text-left">
 									<th className="py-2 pr-3 w-8">
-										<input ref={headerCheckRef} type="checkbox" checked={selected.size === classes.length && classes.length > 0} onChange={toggleAll} className="cursor-pointer accent-[#D4AF37]" />
+										<input ref={headerCheckRef} type="checkbox" checked={selected.size === classes.length && classes.length > 0} onChange={toggleAll} className="cursor-pointer accent-gold" />
 									</th>
-									<th className="py-2 pr-4 text-[#0D0F14]/50 font-medium">ID</th>
-									<th className="py-2 pr-4 text-[#0D0F14]/50 font-medium">Name</th>
-									<th className="py-2 pr-4 text-[#0D0F14]/50 font-medium">Sessions</th>
-									<th className="py-2 pr-4 text-[#0D0F14]/50 font-medium">Start</th>
-									<th className="py-2 pr-4 text-[#0D0F14]/50 font-medium">End</th>
-									<th className="py-2 pr-4 text-[#0D0F14]/50 font-medium">Cap</th>
-									<th className="py-2 pr-4 text-[#0D0F14]/50 font-medium">Teacher</th>
-									<th className="py-2 text-[#0D0F14]/50 font-medium"></th>
+									<th className="py-2 pr-4 text-ink/50 font-medium">ID</th>
+									<th className="py-2 pr-4 text-ink/50 font-medium">Name</th>
+									<th className="py-2 pr-4 text-ink/50 font-medium">Sessions</th>
+									<th className="py-2 pr-4 text-ink/50 font-medium">Start</th>
+									<th className="py-2 pr-4 text-ink/50 font-medium">End</th>
+									<th className="py-2 pr-4 text-ink/50 font-medium">Cap</th>
+									<th className="py-2 pr-4 text-ink/50 font-medium">Teacher</th>
+									<th className="py-2 text-ink/50 font-medium"></th>
 								</tr>
 							</thead>
 							<tbody>
@@ -241,25 +241,25 @@ function ClassListView({ onViewClass }: { onViewClass: (id: number, name: string
 									const isSel   = selected.has(c.id);
 									const teacher = teachers.find(t => t.id === c.teacher_id);
 									return (
-										<tr key={c.id} onClick={() => toggleRow(c.id)} className={`border-b border-[#0D0F14]/8 cursor-pointer transition-colors ${isSel ? "bg-[#D4AF37]/10" : "hover:bg-white/40"}`}>
+										<tr key={c.id} onClick={() => toggleRow(c.id)} className={`border-b border-ink/8 cursor-pointer transition-colors ${isSel ? "bg-gold/10" : "hover:bg-white/40"}`}>
 											<td className="py-2.5 pr-3">
-												<input type="checkbox" checked={isSel} onChange={() => toggleRow(c.id)} onClick={e => e.stopPropagation()} className="cursor-pointer accent-[#D4AF37]" />
+												<input type="checkbox" checked={isSel} onChange={() => toggleRow(c.id)} onClick={e => e.stopPropagation()} className="cursor-pointer accent-gold" />
 											</td>
-											<td className="py-2.5 pr-4 text-[#0D0F14]/40 text-xs">{c.id}</td>
-											<td className="py-2.5 pr-4 font-medium text-[#0D0F14]">{c.class_name}</td>
-											<td className="py-2.5 pr-4 text-[#0D0F14]/60">{c.total_sessions}</td>
-											<td className="py-2.5 pr-4 text-[#0D0F14]/60">{c.start_date}</td>
-											<td className="py-2.5 pr-4 text-[#0D0F14]/60">{c.end_date}</td>
-											<td className="py-2.5 pr-4 text-[#0D0F14]/60">{c.capacity}</td>
-											<td className="py-2.5 pr-4 text-[#0D0F14]/60">{teacher ? `${teacher.fname} ${teacher.lname}` : <span className="text-[#0D0F14]/30">—</span>}</td>
+											<td className="py-2.5 pr-4 text-ink/40 text-xs">{c.id}</td>
+											<td className="py-2.5 pr-4 font-medium text-ink">{c.class_name}</td>
+											<td className="py-2.5 pr-4 text-ink/60">{c.total_sessions}</td>
+											<td className="py-2.5 pr-4 text-ink/60">{c.start_date}</td>
+											<td className="py-2.5 pr-4 text-ink/60">{c.end_date}</td>
+											<td className="py-2.5 pr-4 text-ink/60">{c.capacity}</td>
+											<td className="py-2.5 pr-4 text-ink/60">{teacher ? `${teacher.fname} ${teacher.lname}` : <span className="text-ink/30">—</span>}</td>
 											<td className="py-2.5">
-												<button onClick={e => { e.stopPropagation(); onViewClass(c.id, c.class_name); }} className="text-xs text-[#D4AF37] hover:underline font-medium">View →</button>
+												<button onClick={e => { e.stopPropagation(); onViewClass(c.id, c.class_name); }} className="text-xs text-gold hover:underline font-medium">View →</button>
 											</td>
 										</tr>
 									);
 								})}
 							</tbody>
-						</table>
+						</table></div>
 					)}
 				</div>
 			</div>
@@ -390,15 +390,15 @@ function ClassDetailView({
 	const enrolledIds = new Set(enrolledStudents.map(s => s.id));
 	const unenrolledStudents = allStudents.filter(s => !enrolledIds.has(s.id));
 
-	if (loading) return <p className="p-6 text-[#0D0F14]/50">Loading…</p>;
-	if (!cls) return <p className="p-6 text-[#0D0F14]/50">Class not found.</p>;
+	if (loading) return <p className="p-6 text-ink/50">Loading…</p>;
+	if (!cls) return <p className="p-6 text-ink/50">Class not found.</p>;
 
 	const teacher = teachers.find(t => t.id === cls.teacher_id);
 
 	return (
 		<div className="flex flex-col min-h-[calc(100vh-56px)] md:min-h-screen">
-			<div className="border-b border-[#d4c9b0] bg-[#ede8df] px-6 py-3 flex items-center gap-3 shrink-0">
-				<button onClick={onBack} className="text-[#5b6072] hover:text-[#0D0F14] transition-colors text-sm">← Back</button>
+			<div className="border-b border-cream-dim bg-[#ede8df] px-6 py-3 flex items-center gap-3 shrink-0">
+				<button onClick={onBack} className="text-ink-soft hover:text-ink transition-colors text-sm">← Back</button>
 			</div>
 
 			<div className="flex-1 p-6 overflow-auto flex flex-col gap-8">
@@ -408,13 +408,13 @@ function ClassDetailView({
 
 				<div>
 					<div className="flex items-center gap-3 mb-3">
-						<h2 className="text-lg font-semibold text-[#0D0F14]">{cls.class_name}</h2>
-						<span className="text-[#0D0F14]/40 text-sm">{cls.start_date} – {cls.end_date}</span>
-						{teacher && <span className="text-xs bg-[#D4AF37]/15 text-[#0D0F14]/70 px-2 py-0.5 rounded-full">{teacher.fname} {teacher.lname}</span>}
+						<h2 className="text-lg font-semibold text-ink">{cls.class_name}</h2>
+						<span className="text-ink/40 text-sm">{cls.start_date} – {cls.end_date}</span>
+						{teacher && <span className="text-xs bg-gold/15 text-ink/70 px-2 py-0.5 rounded-full">{teacher.fname} {teacher.lname}</span>}
 						<button onClick={() => setShowEdit(v => !v)} className={ghostBtn}>{showEdit ? "Cancel" : "Edit Class"}</button>
 					</div>
 					{showEdit && (
-						<div className="bg-white rounded-xl border border-[#D4AF37]/30 p-5 max-w-md">
+						<div className="bg-white rounded-xl border border-gold/30 p-5 max-w-md">
 							<form onSubmit={handleEditClass} className="flex flex-col gap-3">
 								<input className={inputCls} placeholder="Class name" value={editForm.class_name} onChange={e => setEditForm(f => ({ ...f, class_name: e.target.value }))} required />
 								<input className={inputCls} type="number" placeholder="Total sessions" value={editForm.total_sessions} onChange={e => setEditForm(f => ({ ...f, total_sessions: e.target.value }))} required />
@@ -434,7 +434,7 @@ function ClassDetailView({
 				</div>
 
 				<div>
-					<h3 className="font-semibold text-[#D4AF37] tracking-wide text-sm uppercase mb-3">Enrolled Students</h3>
+					<h3 className="font-semibold text-gold tracking-wide text-sm uppercase mb-3">Enrolled Students</h3>
 					<form onSubmit={handleEnroll} className="flex gap-2 mb-4 max-w-sm">
 						<select className={inputCls + " flex-1"} value={enrollId} onChange={e => setEnrollId(e.target.value)} required>
 							<option value="">Enroll a student…</option>
@@ -443,61 +443,61 @@ function ClassDetailView({
 						<button className={btnCls} type="submit">Enroll</button>
 					</form>
 					{enrolledStudents.length === 0 ? (
-						<p className="text-[#0D0F14]/50 text-sm">No students enrolled yet.</p>
+						<p className="text-ink/50 text-sm">No students enrolled yet.</p>
 					) : (
-						<table className="w-full text-sm border-collapse max-w-xl">
+						<div className="overflow-x-auto"><table className="w-full text-sm border-collapse max-w-xl">
 							<thead>
-								<tr className="border-b border-[#D4AF37]/40 text-left">
-									<th className="py-2 pr-4 text-[#0D0F14]/50 font-medium">Name</th>
-									<th className="py-2 text-[#0D0F14]/50 font-medium"></th>
+								<tr className="border-b border-gold/40 text-left">
+									<th className="py-2 pr-4 text-ink/50 font-medium">Name</th>
+									<th className="py-2 text-ink/50 font-medium"></th>
 								</tr>
 							</thead>
 							<tbody>
 								{enrolledStudents.map(s => (
-									<tr key={s.id} className="border-b border-[#0D0F14]/8">
-										<td className="py-2.5 pr-4 font-medium text-[#0D0F14]">{s.fname} {s.lname}</td>
+									<tr key={s.id} className="border-b border-ink/8">
+										<td className="py-2.5 pr-4 font-medium text-ink">{s.fname} {s.lname}</td>
 										<td className="py-2.5 flex items-center gap-3">
-											<button onClick={() => onViewStudent(s.id)} className="text-xs text-[#D4AF37] hover:underline font-medium">View →</button>
+											<button onClick={() => onViewStudent(s.id)} className="text-xs text-gold hover:underline font-medium">View →</button>
 											<button onClick={() => handleUnenroll(s.id)} className="text-xs text-red-500 hover:underline">Remove</button>
 										</td>
 									</tr>
 								))}
 							</tbody>
-						</table>
+						</table></div>
 					)}
 				</div>
 
 				<div>
-					<h3 className="font-semibold text-[#D4AF37] tracking-wide text-sm uppercase mb-3">Sessions</h3>
+					<h3 className="font-semibold text-gold tracking-wide text-sm uppercase mb-3">Sessions</h3>
 					<form onSubmit={handleAddSession} className="flex gap-2 mb-4 max-w-sm flex-wrap">
 						<input className={inputCls + " flex-1"} type="date" placeholder="Date" value={sessionForm.class_date} onChange={e => setSessionForm(f => ({ ...f, class_date: e.target.value }))} required />
 						<input className={inputCls + " w-40"} type="number" placeholder="Duration (min)" value={sessionForm.class_duration} onChange={e => setSessionForm(f => ({ ...f, class_duration: e.target.value }))} required />
 						<button className={btnCls} type="submit">Add Session</button>
 					</form>
 					{sessions.length === 0 ? (
-						<p className="text-[#0D0F14]/50 text-sm">No sessions yet.</p>
+						<p className="text-ink/50 text-sm">No sessions yet.</p>
 					) : (
-						<table className="w-full text-sm border-collapse max-w-xl">
+						<div className="overflow-x-auto"><table className="w-full text-sm border-collapse max-w-xl">
 							<thead>
-								<tr className="border-b border-[#D4AF37]/40 text-left">
-									<th className="py-2 pr-4 text-[#0D0F14]/50 font-medium">Date</th>
-									<th className="py-2 pr-4 text-[#0D0F14]/50 font-medium">Duration</th>
-									<th className="py-2 text-[#0D0F14]/50 font-medium"></th>
+								<tr className="border-b border-gold/40 text-left">
+									<th className="py-2 pr-4 text-ink/50 font-medium">Date</th>
+									<th className="py-2 pr-4 text-ink/50 font-medium">Duration</th>
+									<th className="py-2 text-ink/50 font-medium"></th>
 								</tr>
 							</thead>
 							<tbody>
 								{sessions.map(s => (
-									<tr key={s.id} className="border-b border-[#0D0F14]/8">
-										<td className="py-2.5 pr-4 font-medium text-[#0D0F14]">{s.class_date}</td>
-										<td className="py-2.5 pr-4 text-[#0D0F14]/60">{s.class_duration} min</td>
+									<tr key={s.id} className="border-b border-ink/8">
+										<td className="py-2.5 pr-4 font-medium text-ink">{s.class_date}</td>
+										<td className="py-2.5 pr-4 text-ink/60">{s.class_duration} min</td>
 										<td className="py-2.5 flex items-center gap-3">
-											<button onClick={() => onViewSession(s.id, s.class_date)} className="text-xs text-[#D4AF37] hover:underline font-medium">View →</button>
+											<button onClick={() => onViewSession(s.id, s.class_date)} className="text-xs text-gold hover:underline font-medium">View →</button>
 											<button onClick={() => handleDeleteSession(s.id)} className="text-xs text-red-500 hover:underline">Delete</button>
 										</td>
 									</tr>
 								))}
 							</tbody>
-						</table>
+						</table></div>
 					)}
 				</div>
 			</div>
@@ -639,16 +639,16 @@ function SessionDetailView({
 	const unmarkedStudents = enrolledStudents.filter(s => !markedIds.has(s.id));
 	const studentMap = Object.fromEntries(enrolledStudents.map(s => [s.id, s]));
 
-	if (loading) return <p className="p-6 text-[#0D0F14]/50">Loading…</p>;
+	if (loading) return <p className="p-6 text-ink/50">Loading…</p>;
 
 	return (
 		<div className="flex flex-col min-h-[calc(100vh-56px)] md:min-h-screen">
-			<div className="border-b border-[#d4c9b0] bg-[#ede8df] px-6 py-3 flex items-center gap-3 shrink-0">
-				<button onClick={onBack} className="text-[#5b6072] hover:text-[#0D0F14] transition-colors text-sm">← Back</button>
+			<div className="border-b border-cream-dim bg-[#ede8df] px-6 py-3 flex items-center gap-3 shrink-0">
+				<button onClick={onBack} className="text-ink-soft hover:text-ink transition-colors text-sm">← Back</button>
 				<div className="flex-1" />
 				<button
 					onClick={() => { setShowImport(v => !v); setImportRows([]); if (fileInputRef.current) fileInputRef.current.value = ""; }}
-					className={`rounded-lg px-4 py-1.5 text-sm font-medium transition-colors border ${showImport ? "bg-[#D4AF37] border-[#D4AF37] text-[#0D0F14]" : "border-[#D4AF37]/70 text-[#D4AF37] hover:bg-[#D4AF37]/10"}`}
+					className={`rounded-lg px-4 py-1.5 text-sm font-medium transition-colors border ${showImport ? "bg-gold border-gold text-ink" : "border-gold/70 text-gold hover:bg-gold/10"}`}
 				>
 					Import Attendance
 				</button>
@@ -664,50 +664,48 @@ function SessionDetailView({
 				]} />
 
 				{showImport && (
-					<div className="bg-white rounded-xl border border-[#D4AF37]/30 p-5 flex flex-col gap-4 max-w-xl">
+					<div className="bg-white rounded-xl border border-gold/30 p-5 flex flex-col gap-4 max-w-xl">
 						<div className="flex items-center justify-between">
-							<h4 className="text-xs font-semibold uppercase tracking-wider text-[#5b6072]">Bulk Import Attendance</h4>
+							<h4 className="text-xs font-semibold uppercase tracking-wider text-ink-soft">Bulk Import Attendance</h4>
 							<button
 								onClick={handleDownloadTemplate}
-								className="text-xs text-[#D4AF37] hover:underline font-medium flex items-center gap-1"
+								className="text-xs text-gold hover:underline font-medium flex items-center gap-1"
 							>
 								↓ Download Template
 							</button>
 						</div>
 
 						<div className="flex flex-col gap-1.5">
-							<label className="text-xs font-semibold text-[#0D0F14]/60 uppercase tracking-wide">Upload filled sheet (.xlsx)</label>
+							<label className="text-xs font-semibold text-ink/60 uppercase tracking-wide">Upload filled sheet (.xlsx)</label>
 							<input
 								ref={fileInputRef}
 								type="file"
 								accept=".xlsx,.xls"
 								onChange={handleFileChange}
-								className="text-sm text-[#0D0F14] file:mr-3 file:rounded-lg file:border-0 file:bg-[#D4AF37]/10 file:px-3 file:py-1.5 file:text-xs file:font-semibold file:text-[#0D0F14] hover:file:bg-[#D4AF37]/20 file:cursor-pointer cursor-pointer"
+								className="text-sm text-ink file:mr-3 file:rounded-lg file:border-0 file:bg-gold/10 file:px-3 file:py-1.5 file:text-xs file:font-semibold file:text-ink hover:file:bg-gold/20 file:cursor-pointer cursor-pointer"
 							/>
 						</div>
 
 						{importRows.length > 0 && (
 							<>
-								<div className="overflow-x-auto">
-									<table className="w-full text-sm border-collapse">
+								<div className="overflow-x-auto"><table className="w-full text-sm border-collapse">
 										<thead>
-											<tr className="border-b border-[#D4AF37]/40 text-left">
-												<th className="py-1.5 pr-4 text-[#0D0F14]/50 font-medium">Student</th>
-												<th className="py-1.5 pr-4 text-[#0D0F14]/50 font-medium">student_id</th>
-												<th className="py-1.5 text-[#0D0F14]/50 font-medium">participation_score</th>
+											<tr className="border-b border-gold/40 text-left">
+												<th className="py-1.5 pr-4 text-ink/50 font-medium">Student</th>
+												<th className="py-1.5 pr-4 text-ink/50 font-medium">student_id</th>
+												<th className="py-1.5 text-ink/50 font-medium">participation_score</th>
 											</tr>
 										</thead>
 										<tbody>
 											{importRows.map((r, i) => (
-												<tr key={i} className="border-b border-[#0D0F14]/8">
-													<td className="py-2 pr-4 text-[#0D0F14]">{r._name || <span className="text-[#0D0F14]/30">—</span>}</td>
-													<td className="py-2 pr-4 text-[#0D0F14]/60 font-mono text-xs">{r.student_id}</td>
-													<td className="py-2 text-[#0D0F14]/60">{r.participation_score ?? <span className="text-[#0D0F14]/30">—</span>}</td>
+												<tr key={i} className="border-b border-ink/8">
+													<td className="py-2 pr-4 text-ink">{r._name || <span className="text-ink/30">—</span>}</td>
+													<td className="py-2 pr-4 text-ink/60 font-mono text-xs">{r.student_id}</td>
+													<td className="py-2 text-ink/60">{r.participation_score ?? <span className="text-ink/30">—</span>}</td>
 												</tr>
 											))}
 										</tbody>
-									</table>
-								</div>
+									</table></div>
 								<button
 									onClick={handleImport}
 									disabled={importing}
@@ -721,8 +719,8 @@ function SessionDetailView({
 				)}
 
 				{unmarkedStudents.length > 0 && (
-					<div className="bg-white rounded-xl border border-[#D4AF37]/30 p-5 max-w-md">
-						<h4 className="text-xs font-semibold uppercase tracking-wider text-[#5b6072] mb-3">Add Attendance</h4>
+					<div className="bg-white rounded-xl border border-gold/30 p-5 max-w-md">
+						<h4 className="text-xs font-semibold uppercase tracking-wider text-ink-soft mb-3">Add Attendance</h4>
 						<form onSubmit={handleAdd} className="flex flex-col gap-3">
 							<select className={inputCls} value={addStudentId} onChange={e => setAddStudentId(e.target.value)} required>
 								<option value="">Select student</option>
@@ -735,27 +733,27 @@ function SessionDetailView({
 				)}
 
 				<div>
-					<h3 className="font-semibold text-[#D4AF37] tracking-wide text-sm uppercase mb-3">Attendance</h3>
+					<h3 className="font-semibold text-gold tracking-wide text-sm uppercase mb-3">Attendance</h3>
 					{attendance.length === 0 ? (
-						<p className="text-[#0D0F14]/50 text-sm">No attendance records yet.</p>
+						<p className="text-ink/50 text-sm">No attendance records yet.</p>
 					) : (
-						<table className="w-full text-sm border-collapse max-w-xl">
+						<div className="overflow-x-auto"><table className="w-full text-sm border-collapse max-w-xl">
 							<thead>
-								<tr className="border-b border-[#D4AF37]/40 text-left">
-									<th className="py-2 pr-4 text-[#0D0F14]/50 font-medium">Student</th>
-									<th className="py-2 pr-4 text-[#0D0F14]/50 font-medium">Score</th>
-									<th className="py-2 text-[#0D0F14]/50 font-medium"></th>
+								<tr className="border-b border-gold/40 text-left">
+									<th className="py-2 pr-4 text-ink/50 font-medium">Student</th>
+									<th className="py-2 pr-4 text-ink/50 font-medium">Score</th>
+									<th className="py-2 text-ink/50 font-medium"></th>
 								</tr>
 							</thead>
 							<tbody>
 								{attendance.map(a => {
 									const student = studentMap[a.student_id];
 									return (
-										<tr key={a.id} className="border-b border-[#0D0F14]/8">
-											<td className="py-2.5 pr-4 font-medium text-[#0D0F14]">
+										<tr key={a.id} className="border-b border-ink/8">
+											<td className="py-2.5 pr-4 font-medium text-ink">
 												{student ? `${student.fname} ${student.lname}` : `Student #${a.student_id}`}
 											</td>
-											<td className="py-2.5 pr-4 text-[#0D0F14]/60">
+											<td className="py-2.5 pr-4 text-ink/60">
 												{editingId === a.id ? (
 													<input
 														className={inputCls + " py-1 w-24"}
@@ -767,8 +765,8 @@ function SessionDetailView({
 														onKeyDown={e => { if (e.key === "Enter") handleUpdateScore(a.id); if (e.key === "Escape") { setEditingId(null); setEditScore(""); } }}
 													/>
 												) : (
-													<button onClick={() => { setEditingId(a.id); setEditScore(String(a.participation_score ?? "")); }} className="hover:text-[#D4AF37] transition-colors">
-														{a.participation_score ?? <span className="text-[#0D0F14]/30">—</span>}
+													<button onClick={() => { setEditingId(a.id); setEditScore(String(a.participation_score ?? "")); }} className="hover:text-gold transition-colors">
+														{a.participation_score ?? <span className="text-ink/30">—</span>}
 													</button>
 												)}
 											</td>
@@ -779,7 +777,7 @@ function SessionDetailView({
 									);
 								})}
 							</tbody>
-						</table>
+						</table></div>
 					)}
 				</div>
 			</div>

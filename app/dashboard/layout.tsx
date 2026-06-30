@@ -15,7 +15,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 				<DashboardSidebar />
 				<div className="flex-1 flex flex-col min-h-screen">
 					<DashboardMobileHeader />
-					<main className="flex-1 bg-[#f5f0e8] text-[#0D0F14] pt-14 md:pt-0">
+					<main className="flex-1 bg-cream text-ink pt-14 md:pt-0">
 						{children}
 					</main>
 				</div>

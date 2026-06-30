@@ -16,8 +16,8 @@ interface StudentDetail {
 
 type Action = "create-student" | "assign-parent" | null;
 
-const inputCls = "rounded-lg border border-[#D4AF37]/60 bg-white/70 px-3 py-2 text-sm text-[#0D0F14] placeholder:text-[#0D0F14]/40 focus:outline-none focus:ring-1 focus:ring-[#D4AF37]";
-const btnCls   = "rounded-lg bg-[#D4AF37] px-4 py-2 text-sm font-semibold text-[#0D0F14] hover:bg-[#c4a230] transition-colors";
+const inputCls = "rounded-lg border border-gold/60 bg-white/70 px-3 py-2 text-sm text-ink placeholder:text-ink/40 focus:outline-none focus:ring-1 focus:ring-gold";
+const btnCls   = "rounded-lg bg-gold px-4 py-2 text-sm font-semibold text-ink hover:bg-gold-light transition-colors";
 
 function StudentDetailPanel({ studentId, onBack }: { studentId: number; onBack: () => void }) {
 	const apiFetch = useApiFetch();
@@ -78,15 +78,15 @@ function StudentDetailPanel({ studentId, onBack }: { studentId: number; onBack: 
 		}
 	};
 
-	if (loading) return <p className="p-6 text-[#0D0F14]/50">Loading…</p>;
-	if (!detail)  return <p className="p-6 text-[#0D0F14]/50">Student not found.</p>;
+	if (loading) return <p className="p-6 text-ink/50">Loading…</p>;
+	if (!detail)  return <p className="p-6 text-ink/50">Student not found.</p>;
 
 	const currentParent = parents.find(p => p.id === detail.parent_id);
 
 	return (
 		<div className="flex flex-col min-h-[calc(100vh-56px)] md:min-h-screen">
-			<div className="border-b border-[#d4c9b0] bg-[#ede8df] px-6 py-3 flex items-center gap-3 shrink-0">
-				<button onClick={onBack} className="text-[#5b6072] hover:text-[#0D0F14] transition-colors text-sm">← All Students</button>
+			<div className="border-b border-cream-dim bg-[#ede8df] px-6 py-3 flex items-center gap-3 shrink-0">
+				<button onClick={onBack} className="text-ink-soft hover:text-ink transition-colors text-sm">← All Students</button>
 				<div className="flex-1" />
 				<button
 					onClick={handleDelete}
@@ -97,28 +97,28 @@ function StudentDetailPanel({ studentId, onBack }: { studentId: number; onBack: 
 				</button>
 			</div>
 			<div className="flex-1 p-6 overflow-auto flex flex-col gap-6">
-				<nav className="flex items-center gap-1.5 text-sm text-[#0D0F14]/50">
-					<button onClick={onBack} className="hover:text-[#D4AF37] transition-colors">All Students</button>
+				<nav className="flex items-center gap-1.5 text-sm text-ink/50">
+					<button onClick={onBack} className="hover:text-gold transition-colors">All Students</button>
 					<span>/</span>
-					<span className="text-[#0D0F14] font-medium">{detail.fname} {detail.lname}</span>
+					<span className="text-ink font-medium">{detail.fname} {detail.lname}</span>
 				</nav>
 
 				{msg && (
 					<p className={`text-sm font-medium ${msg.ok ? "text-green-700" : "text-red-600"}`}>{msg.text}</p>
 				)}
 
-				<div className="bg-white rounded-xl border border-[#D4AF37]/30 p-5 max-w-md flex flex-col gap-3">
-					<h2 className="text-lg font-semibold text-[#0D0F14]">{detail.fname} {detail.lname}</h2>
-					<p className="text-sm text-[#0D0F14]/60">
+				<div className="bg-white rounded-xl border border-gold/30 p-5 max-w-md flex flex-col gap-3">
+					<h2 className="text-lg font-semibold text-ink">{detail.fname} {detail.lname}</h2>
+					<p className="text-sm text-ink/60">
 						Parent:{" "}
 						{currentParent
-							? <span className="text-[#0D0F14]">{currentParent.fname} {currentParent.lname}</span>
-							: <span className="text-[#0D0F14]/30">None assigned</span>
+							? <span className="text-ink">{currentParent.fname} {currentParent.lname}</span>
+							: <span className="text-ink/30">None assigned</span>
 						}
 					</p>
-					<p className="text-sm text-[#0D0F14]/60">Exams on record: {detail.exam_count}</p>
+					<p className="text-sm text-ink/60">Exams on record: {detail.exam_count}</p>
 
-					<form onSubmit={handleAssign} className="flex gap-2 pt-1 border-t border-[#D4AF37]/20">
+					<form onSubmit={handleAssign} className="flex gap-2 pt-1 border-t border-gold/20">
 						<select
 							className={`${inputCls} flex-1`}
 							value={assignPid}
@@ -133,7 +133,7 @@ function StudentDetailPanel({ studentId, onBack }: { studentId: number; onBack: 
 						<button
 							type="submit"
 							disabled={assigning || !assignPid}
-							className="rounded-lg bg-[#D4AF37] px-3 py-2 text-sm font-semibold text-[#0D0F14] hover:bg-[#c4a230] transition-colors disabled:opacity-40"
+							className="rounded-lg bg-gold px-3 py-2 text-sm font-semibold text-ink hover:bg-gold-light transition-colors disabled:opacity-40"
 						>
 							{assigning ? "…" : "Assign"}
 						</button>
@@ -141,18 +141,18 @@ function StudentDetailPanel({ studentId, onBack }: { studentId: number; onBack: 
 				</div>
 
 				<div>
-					<h3 className="font-semibold text-[#D4AF37] tracking-wide text-sm uppercase mb-3">Enrolled Classes</h3>
+					<h3 className="font-semibold text-gold tracking-wide text-sm uppercase mb-3">Enrolled Classes</h3>
 					{detail.enrolled_classes.length === 0 ? (
-						<p className="text-[#0D0F14]/50 text-sm">Not enrolled in any classes.</p>
+						<p className="text-ink/50 text-sm">Not enrolled in any classes.</p>
 					) : (
 						<ul className="flex flex-col gap-2 max-w-sm">
 							{detail.enrolled_classes.map(c => (
 								<li key={c.id}>
 									<button
 										onClick={() => router.push(`/dashboard/admin/classes?class=${c.id}`)}
-										className="w-full text-left bg-white rounded-lg border border-[#D4AF37]/20 px-4 py-2.5 text-sm font-medium text-[#0D0F14] hover:border-[#D4AF37]/60 hover:bg-[#D4AF37]/5 transition-colors"
+										className="w-full text-left bg-white rounded-lg border border-gold/20 px-4 py-2.5 text-sm font-medium text-ink hover:border-gold/60 hover:bg-gold/5 transition-colors"
 									>
-										{c.class_name} <span className="text-[#D4AF37] ml-1">→</span>
+										{c.class_name} <span className="text-gold ml-1">→</span>
 									</button>
 								</li>
 							))}
@@ -276,22 +276,22 @@ export default function StudentsTab() {
 
 	if (selectedId) return <StudentDetailPanel studentId={selectedId} onBack={() => router.push("/dashboard/admin/students")} />;
 
-	if (loading) return <p className="p-6 text-[#0D0F14]/50">Loading…</p>;
+	if (loading) return <p className="p-6 text-ink/50">Loading…</p>;
 
 	return (
 		<div className="flex flex-col min-h-[calc(100vh-56px)] md:min-h-screen">
 
 			{/* Action bar */}
-			<div className="border-b border-[#d4c9b0] bg-[#ede8df] px-6 py-3 flex items-center gap-3 flex-wrap shrink-0">
-				<span className="text-xs font-semibold uppercase tracking-wider text-[#5b6072] mr-1">Students</span>
+			<div className="border-b border-cream-dim bg-[#ede8df] px-6 py-3 flex items-center gap-3 flex-wrap shrink-0">
+				<span className="text-xs font-semibold uppercase tracking-wider text-ink-soft mr-1">Students</span>
 				{(["create-student", "assign-parent"] as const).map(key => (
 					<button
 						key={key}
 						onClick={() => toggle(key)}
 						className={`rounded-lg px-4 py-1.5 text-sm font-medium transition-colors border ${
 							action === key
-								? "bg-[#D4AF37] border-[#D4AF37] text-[#0D0F14]"
-								: "border-[#D4AF37]/70 text-[#D4AF37] hover:bg-[#D4AF37]/10"
+								? "bg-gold border-gold text-ink"
+								: "border-gold/70 text-gold hover:bg-gold/10"
 						}`}
 					>
 						{key === "create-student" ? "Create Student" : "Assign Parent"}
@@ -316,7 +316,7 @@ export default function StudentsTab() {
 				)}
 
 				{action === "create-student" && (
-					<div className="bg-white rounded-xl border border-[#D4AF37]/30 p-5 max-w-md">
+					<div className="bg-white rounded-xl border border-gold/30 p-5 max-w-md">
 						<form onSubmit={handleCreate} className="flex flex-col gap-3">
 							<input className={inputCls} placeholder="First name" value={createForm.fname} onChange={e => setCreateForm(f => ({ ...f, fname: e.target.value }))} required />
 							<input className={inputCls} placeholder="Last name"  value={createForm.lname} onChange={e => setCreateForm(f => ({ ...f, lname: e.target.value }))} required />
@@ -330,7 +330,7 @@ export default function StudentsTab() {
 				)}
 
 				{action === "assign-parent" && (
-					<div className="bg-white rounded-xl border border-[#D4AF37]/30 p-5 max-w-md">
+					<div className="bg-white rounded-xl border border-gold/30 p-5 max-w-md">
 						<form onSubmit={handleAssign} className="flex flex-col gap-3">
 							<select className={inputCls} value={assignForm.student_id} onChange={e => setAssignForm(f => ({ ...f, student_id: e.target.value }))} required>
 								<option value="">Select student</option>
@@ -347,26 +347,26 @@ export default function StudentsTab() {
 
 				{/* Students table */}
 				<div>
-					<h3 className="font-semibold text-[#D4AF37] tracking-wide text-sm uppercase mb-4">All Students</h3>
+					<h3 className="font-semibold text-gold tracking-wide text-sm uppercase mb-4">All Students</h3>
 					{students.length === 0 ? (
-						<p className="text-[#0D0F14]/50 text-sm">No students yet.</p>
+						<p className="text-ink/50 text-sm">No students yet.</p>
 					) : (
-						<table className="w-full text-sm border-collapse">
+						<div className="overflow-x-auto"><table className="w-full text-sm border-collapse">
 							<thead>
-								<tr className="border-b border-[#D4AF37]/40 text-left">
+								<tr className="border-b border-gold/40 text-left">
 									<th className="py-2 pr-3 w-8">
 										<input
 											ref={headerCheckRef}
 											type="checkbox"
 											checked={selected.size === students.length && students.length > 0}
 											onChange={toggleAll}
-											className="cursor-pointer accent-[#D4AF37]"
+											className="cursor-pointer accent-gold"
 										/>
 									</th>
-									<th className="py-2 pr-4 text-[#0D0F14]/50 font-medium">ID</th>
-									<th className="py-2 pr-4 text-[#0D0F14]/50 font-medium">Name</th>
-									<th className="py-2 pr-4 text-[#0D0F14]/50 font-medium">Parent</th>
-									<th className="py-2 text-[#0D0F14]/50 font-medium"></th>
+									<th className="py-2 pr-4 text-ink/50 font-medium">ID</th>
+									<th className="py-2 pr-4 text-ink/50 font-medium">Name</th>
+									<th className="py-2 pr-4 text-ink/50 font-medium">Parent</th>
+									<th className="py-2 text-ink/50 font-medium"></th>
 								</tr>
 							</thead>
 							<tbody>
@@ -377,8 +377,8 @@ export default function StudentsTab() {
 										<tr
 											key={s.id}
 											onClick={() => toggleRow(s.id)}
-											className={`border-b border-[#0D0F14]/8 cursor-pointer transition-colors ${
-												isSel ? "bg-[#D4AF37]/10" : "hover:bg-white/40"
+											className={`border-b border-ink/8 cursor-pointer transition-colors ${
+												isSel ? "bg-gold/10" : "hover:bg-white/40"
 											}`}
 										>
 											<td className="py-2.5 pr-3">
@@ -387,20 +387,20 @@ export default function StudentsTab() {
 													checked={isSel}
 													onChange={() => toggleRow(s.id)}
 													onClick={e => e.stopPropagation()}
-													className="cursor-pointer accent-[#D4AF37]"
+													className="cursor-pointer accent-gold"
 												/>
 											</td>
-											<td className="py-2.5 pr-4 text-[#0D0F14]/40 text-xs">{s.id}</td>
-											<td className="py-2.5 pr-4 font-medium text-[#0D0F14]">{s.fname} {s.lname}</td>
-											<td className="py-2.5 pr-4 text-[#0D0F14]/60">{parent ? `${parent.fname} ${parent.lname}` : "—"}</td>
+											<td className="py-2.5 pr-4 text-ink/40 text-xs">{s.id}</td>
+											<td className="py-2.5 pr-4 font-medium text-ink">{s.fname} {s.lname}</td>
+											<td className="py-2.5 pr-4 text-ink/60">{parent ? `${parent.fname} ${parent.lname}` : "—"}</td>
 											<td className="py-2.5">
-												<button onClick={e => { e.stopPropagation(); router.push(`/dashboard/admin/students?student=${s.id}`); }} className="text-xs text-[#D4AF37] hover:underline font-medium">View →</button>
+												<button onClick={e => { e.stopPropagation(); router.push(`/dashboard/admin/students?student=${s.id}`); }} className="text-xs text-gold hover:underline font-medium">View →</button>
 											</td>
 										</tr>
 									);
 								})}
 							</tbody>
-						</table>
+						</table></div>
 					)}
 				</div>
 

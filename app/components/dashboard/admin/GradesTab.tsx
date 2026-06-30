@@ -12,8 +12,8 @@ const GRADE_TYPES = ["exam", "homework"];
 
 type Action = "add-grade" | "edit-grade" | null;
 
-const inputCls  = "rounded-lg border border-[#D4AF37]/60 bg-white/70 px-3 py-2 text-sm text-[#0D0F14] placeholder:text-[#0D0F14]/40 focus:outline-none focus:ring-1 focus:ring-[#D4AF37]";
-const btnCls    = "rounded-lg bg-[#D4AF37] px-4 py-2 text-sm font-semibold text-[#0D0F14] hover:bg-[#c4a230] transition-colors";
+const inputCls  = "rounded-lg border border-gold/60 bg-white/70 px-3 py-2 text-sm text-ink placeholder:text-ink/40 focus:outline-none focus:ring-1 focus:ring-gold";
+const btnCls    = "rounded-lg bg-gold px-4 py-2 text-sm font-semibold text-ink hover:bg-gold-light transition-colors";
 const emptyAdd  = { student_id: "", class_id: "", title: "", score: "", max_score: "", type: "exam", exam_date: "" };
 const emptyEdit = { title: "", score: "", max_score: "", type: "exam", exam_date: "" };
 
@@ -165,20 +165,20 @@ export default function GradesTab() {
 		}
 	};
 
-	if (loading) return <p className="p-6 text-[#0D0F14]/50">Loading…</p>;
+	if (loading) return <p className="p-6 text-ink/50">Loading…</p>;
 
 	return (
 		<div className="flex flex-col min-h-[calc(100vh-56px)] md:min-h-screen">
 
 			{/* Action bar */}
-			<div className="border-b border-[#d4c9b0] bg-[#ede8df] px-6 py-3 flex items-center gap-3 flex-wrap shrink-0">
-				<span className="text-xs font-semibold uppercase tracking-wider text-[#5b6072] mr-1">Grades</span>
+			<div className="border-b border-cream-dim bg-[#ede8df] px-6 py-3 flex items-center gap-3 flex-wrap shrink-0">
+				<span className="text-xs font-semibold uppercase tracking-wider text-ink-soft mr-1">Grades</span>
 				<button
 					onClick={() => toggle("add-grade")}
 					className={`rounded-lg px-4 py-1.5 text-sm font-medium transition-colors border ${
 						action === "add-grade"
-							? "bg-[#D4AF37] border-[#D4AF37] text-[#0D0F14]"
-							: "border-[#D4AF37]/70 text-[#D4AF37] hover:bg-[#D4AF37]/10"
+							? "bg-gold border-gold text-ink"
+							: "border-gold/70 text-gold hover:bg-gold/10"
 					}`}
 				>
 					Add Grade
@@ -188,10 +188,10 @@ export default function GradesTab() {
 					disabled={selected.size !== 1}
 					className={`rounded-lg px-4 py-1.5 text-sm font-medium transition-colors border ${
 						action === "edit-grade"
-							? "bg-[#D4AF37] border-[#D4AF37] text-[#0D0F14]"
+							? "bg-gold border-gold text-ink"
 							: selected.size === 1
-							? "border-[#D4AF37]/70 text-[#D4AF37] hover:bg-[#D4AF37]/10"
-							: "border-[#0D0F14]/20 text-[#0D0F14]/30 cursor-not-allowed"
+							? "border-gold/70 text-gold hover:bg-gold/10"
+							: "border-ink/20 text-ink/30 cursor-not-allowed"
 					}`}
 				>
 					Edit Grade
@@ -206,7 +206,7 @@ export default function GradesTab() {
 				)}
 
 				{action === "add-grade" && (
-					<div className="bg-white rounded-xl border border-[#D4AF37]/30 p-5 max-w-md">
+					<div className="bg-white rounded-xl border border-gold/30 p-5 max-w-md">
 						<form onSubmit={handleAddGrade} className="flex flex-col gap-3">
 							<select className={inputCls} value={addForm.student_id} onChange={e => setAddForm(f => ({ ...f, student_id: e.target.value }))} required>
 								<option value="">Select student</option>
@@ -231,7 +231,7 @@ export default function GradesTab() {
 				)}
 
 				{action === "edit-grade" && selected.size === 1 && (
-					<div className="bg-white rounded-xl border border-[#D4AF37]/30 p-5 max-w-md">
+					<div className="bg-white rounded-xl border border-gold/30 p-5 max-w-md">
 						<form onSubmit={handleEditGrade} className="flex flex-col gap-3">
 							<input className={inputCls} placeholder="Title (e.g. HW 3, Midterm)" value={editForm.title} onChange={e => setEditForm(f => ({ ...f, title: e.target.value }))} />
 							<select className={inputCls} value={editForm.type} onChange={e => setEditForm(f => ({ ...f, type: e.target.value }))} required>
@@ -250,7 +250,7 @@ export default function GradesTab() {
 				{/* Filters + grades table */}
 				<div className="flex flex-col gap-4">
 					<div className="flex items-center gap-3 flex-wrap">
-						<span className="text-xs font-semibold uppercase tracking-wider text-[#5b6072] shrink-0">View grades for</span>
+						<span className="text-xs font-semibold uppercase tracking-wider text-ink-soft shrink-0">View grades for</span>
 						<select
 							className={inputCls + " max-w-xs"}
 							value={filterClass}
@@ -271,29 +271,29 @@ export default function GradesTab() {
 
 					{selectedStudent && (
 						gradesLoading ? (
-							<p className="text-[#0D0F14]/50 text-sm">Loading grades…</p>
+							<p className="text-ink/50 text-sm">Loading grades…</p>
 						) : grades.length === 0 ? (
-							<p className="text-[#0D0F14]/50 text-sm">No grades recorded for this student.</p>
+							<p className="text-ink/50 text-sm">No grades recorded for this student.</p>
 						) : (
-							<table className="w-full text-sm border-collapse">
+							<div className="overflow-x-auto"><table className="w-full text-sm border-collapse">
 								<thead>
-									<tr className="border-b border-[#D4AF37]/40 text-left">
+									<tr className="border-b border-gold/40 text-left">
 										<th className="py-2 pr-3 w-8">
 											<input
 												ref={headerCheckRef}
 												type="checkbox"
 												checked={selected.size === grades.length && grades.length > 0}
 												onChange={toggleAll}
-												className="cursor-pointer accent-[#D4AF37]"
+												className="cursor-pointer accent-gold"
 											/>
 										</th>
-										<th className="py-2 pr-4 text-[#0D0F14]/50 font-medium">ID</th>
-										<th className="py-2 pr-4 text-[#0D0F14]/50 font-medium">Type</th>
-										<th className="py-2 pr-4 text-[#0D0F14]/50 font-medium">Title</th>
-										<th className="py-2 pr-4 text-[#0D0F14]/50 font-medium">Score</th>
-										<th className="py-2 pr-4 text-[#0D0F14]/50 font-medium">Max</th>
-										<th className="py-2 pr-4 text-[#0D0F14]/50 font-medium">Date</th>
-										<th className="py-2 text-[#0D0F14]/50 font-medium">Class</th>
+										<th className="py-2 pr-4 text-ink/50 font-medium">ID</th>
+										<th className="py-2 pr-4 text-ink/50 font-medium">Type</th>
+										<th className="py-2 pr-4 text-ink/50 font-medium">Title</th>
+										<th className="py-2 pr-4 text-ink/50 font-medium">Score</th>
+										<th className="py-2 pr-4 text-ink/50 font-medium">Max</th>
+										<th className="py-2 pr-4 text-ink/50 font-medium">Date</th>
+										<th className="py-2 text-ink/50 font-medium">Class</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -304,8 +304,8 @@ export default function GradesTab() {
 											<tr
 												key={g.id}
 												onClick={() => toggleRow(g.id)}
-												className={`border-b border-[#0D0F14]/8 cursor-pointer transition-colors ${
-													isSel ? "bg-[#D4AF37]/10" : "hover:bg-white/40"
+												className={`border-b border-ink/8 cursor-pointer transition-colors ${
+													isSel ? "bg-gold/10" : "hover:bg-white/40"
 												}`}
 											>
 												<td className="py-2.5 pr-3">
@@ -314,18 +314,18 @@ export default function GradesTab() {
 														checked={isSel}
 														onChange={() => toggleRow(g.id)}
 														onClick={e => e.stopPropagation()}
-														className="cursor-pointer accent-[#D4AF37]"
+														className="cursor-pointer accent-gold"
 													/>
 												</td>
-												<td className="py-2.5 pr-4 text-[#0D0F14]/40 text-xs">{g.id}</td>
-												<td className="py-2.5 pr-4 font-medium text-[#0D0F14] capitalize">{g.type}</td>
-												<td className="py-2.5 pr-4 text-[#0D0F14]">{g.title || <span className="text-[#0D0F14]/30">—</span>}</td>
-												<td className="py-2.5 pr-4 text-[#0D0F14]">{g.score}</td>
-												<td className="py-2.5 pr-4 text-[#0D0F14]/60">{g.max_score}</td>
-												<td className="py-2.5 pr-4 text-[#0D0F14]/60">{g.exam_date}</td>
-												<td className="py-2.5 text-[#0D0F14]/60" onClick={e => e.stopPropagation()}>
+												<td className="py-2.5 pr-4 text-ink/40 text-xs">{g.id}</td>
+												<td className="py-2.5 pr-4 font-medium text-ink capitalize">{g.type}</td>
+												<td className="py-2.5 pr-4 text-ink">{g.title || <span className="text-ink/30">—</span>}</td>
+												<td className="py-2.5 pr-4 text-ink">{g.score}</td>
+												<td className="py-2.5 pr-4 text-ink/60">{g.max_score}</td>
+												<td className="py-2.5 pr-4 text-ink/60">{g.exam_date}</td>
+												<td className="py-2.5 text-ink/60" onClick={e => e.stopPropagation()}>
 														{cls
-															? <button onClick={() => router.push(`/dashboard/admin/classes?class=${cls.id}`)} className="text-[#D4AF37] hover:underline font-medium">{cls.class_name}</button>
+															? <button onClick={() => router.push(`/dashboard/admin/classes?class=${cls.id}`)} className="text-gold hover:underline font-medium">{cls.class_name}</button>
 															: "—"
 														}
 													</td>
@@ -333,7 +333,7 @@ export default function GradesTab() {
 										);
 									})}
 								</tbody>
-							</table>
+							</table></div>
 						)
 					)}
 				</div>
