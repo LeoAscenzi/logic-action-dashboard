@@ -40,7 +40,7 @@ export default function DashboardSidebar() {
 	return (
 		<aside className="hidden md:flex flex-col w-56 min-h-screen bg-navy border-r border-gold/30 p-6 gap-6">
 			<a href={siteUrl} className="mb-2">
-				<Image src="/logo-light-main.png" alt="Logic Action" width={64} height={64} className="max-h-16 w-auto" priority />
+				<Image src="/logo-light-main.png" alt="Ivy Bridge Societys" width={64} height={64} className="max-h-16 w-auto" priority />
 			</a>
 
 			{user && (

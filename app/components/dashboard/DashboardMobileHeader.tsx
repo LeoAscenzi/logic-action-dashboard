@@ -48,7 +48,7 @@ export default function DashboardMobileHeader() {
 		<div className="fixed inset-0 z-[200] bg-navy flex flex-col">
 			<div className="flex items-center justify-between h-14 px-4 border-b border-gold/30 shrink-0">
 				<a href={siteUrl}>
-					<Image src="/logo-light-main.png" alt="Logic Action" width={32} height={32} className="max-h-8 w-auto" priority />
+					<Image src="/logo-light-main.png" alt="Ivy Bridge Society" width={32} height={32} className="max-h-8 w-auto" priority />
 				</a>
 				<button
 					onClick={() => setOpen(false)}
@@ -117,7 +117,7 @@ export default function DashboardMobileHeader() {
 		<>
 			<div className="md:hidden fixed top-0 inset-x-0 z-50 h-14 bg-navy border-b border-gold/30 flex items-center justify-between px-4 shrink-0">
 				<a href={siteUrl}>
-					<Image src="/logo-light-main.png" alt="Logic Action" width={32} height={32} className="max-h-8 w-auto" priority />
+					<Image src="/logo-light-main.png" alt="Ivy Bridge Society" width={32} height={32} className="max-h-8 w-auto" priority />
 				</a>
 				<button
 					onClick={() => setOpen(true)}
