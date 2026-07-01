@@ -10,8 +10,8 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-inter", weight: ["40
 const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-playfair", weight: ["400", "600", "800"] });
 
 export const metadata: Metadata = {
-	title: "Logic Action Dashboard",
-	description: "Logic Action admin and parent dashboard",
+	title: "Ivy Bridge Society Portal",
+	description: "Ivy Bridge Society Parent/Teacher Portal",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
